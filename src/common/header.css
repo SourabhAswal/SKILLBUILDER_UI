@@ -1,0 +1,14 @@
+.lnk .login-button{
+    background-color: #cecece;
+    color: #000;
+    font-size: 15px;
+    text-decoration: none;
+  }
+  .lnk:hover{
+    background-color: #8d97ad !important;
+    color:white !important;
+  }
+  .login-button:hover{
+    background-color:#8d97ad !important;
+    color:white !important;
+  }

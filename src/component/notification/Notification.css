@@ -1,0 +1,30 @@
+.notificationLink {
+    text-decoration: none;
+    color: inherit;
+    pointer-events: none;
+}
+
+.notificationMsgCard {
+    overflow-y: scroll;
+    position: fixed;
+    /* margin-left: -21vw;
+    margin-top: 20vh; */
+    z-index: 5;
+    height: 60vh;
+    width: 24vw;
+    /* padding: 20px; */
+    /* overflow: overlay; */
+}
+
+/* ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+} */
+
+/* ::-webkit-scrollbar-thumb {
+    background: transparent;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+} */

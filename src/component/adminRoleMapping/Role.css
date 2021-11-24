@@ -1,0 +1,73 @@
+.CardClass {
+    margin-left: 30%;
+    margin-right: 30%;
+    margin-top: 2%;
+    margin-bottom: 5%;
+    border: darkgray;
+    border-width: thin;
+    border-style: solid;
+}
+
+.CardClass2 {
+    margin-left: 17%;
+    margin-right: 30%;
+    margin-top: 10%;
+    margin-bottom: 10%;
+    border: darkgray;
+    border-width: thin;
+    border-style: solid;
+}
+
+.HeaderClass {
+    height: 1.5cm;
+    background-color: lightgray;
+    text-align: center;
+    text-decoration-color: darkgray;
+}
+
+.FormDiv {
+    margin-left: 10%;
+    margin-top: 2%;
+    margin-bottom: 2%;
+}
+
+.ButtonClass {
+    margin-left: 40%;
+}
+
+.FormClass {
+    padding: 2%;
+}
+
+.BoxClass {
+    border: black;
+    border-width: thin;
+    border-style: solid;
+}
+
+.BoxCont {
+    height: 30vh;
+    margin-top: 10%;
+    margin-bottom: 10%;
+    overflow-y: auto;
+}
+
+.ArrowButton {
+    width: 7vw;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-top: 5%;
+    margin-bottom: 5%;
+    background-color: lightblue;
+    border-width: thin;
+}
+
+.ul-sub2 {
+    display: none;
+}
+
+.hover-menu2:hover .ul-sub2 {
+    display: block;
+    left: -35%;
+    top: 36%;
+}

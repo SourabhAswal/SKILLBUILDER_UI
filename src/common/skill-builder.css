@@ -1,0 +1,198 @@
+.btn-learn {
+    margin-top: 10px !important;
+    background-color: #22b1ed !important;
+    border: 0px !important;
+}
+div#content {
+    background-color: #f6f8f9;
+}
+.topbar {
+    height: 3rem!important;
+    box-shadow: 1px 1px 4px 0 #ddd!important;
+    -webkit-box-shadow: 1px 1px 4px 0 #ddd!important;
+    -moz-box-shadow: 1px 1px 4px 0 #ddd!important;
+}
+.card {
+    box-shadow: 1px 1px 4px 0 #ddd!important;
+    -webkit-box-shadow: 1px 1px 4px 0 #ddd!important;
+    -moz-box-shadow: 1px 1px 4px 0 #ddd!important;
+    margin-bottom: 20px;
+} 
+.topbar .dropdown .dropdown-menu {
+    width: auto;
+    right: 0;
+    top: 58px;
+    border: 0px !important;
+}
+.btn-more {
+    box-shadow: 0 .125rem .25rem 0 rgba(58,59,69,.2)!important;
+    background-color: #22b1ed !important;
+    border-color: #22b1ed !important;
+    border-radius: 0px !important;
+}
+.tech-icon
+{
+    position: relative;
+    box-shadow: 1px 1px 4px 0 #ddd!important;
+    -webkit-box-shadow: 1px 1px 4px 0 #ddd!important;
+    -moz-box-shadow: 1px 1px 4px 0 #ddd!important;
+
+}
+ /* #wrapper #content-wrapper {
+    background-color: #fafdfb;
+    width: 100%;
+    overflow: scroll;
+    height: 100vh;
+    overflow-x: hidden;
+}
+div#wrapper {
+    position: fixed;
+    width: 100%;
+}  */
+
+.enroll {
+    position: absolute;
+    /* top: 8px; */
+    /* left: 15px; */
+    font-size: 14px;
+    top: 0;
+    background-color: #40bbef;
+    padding: 1px 25px 1px 25px;
+    color: #fff;
+    clip-path: polygon(0 0, 100% 0%, 86% 100%, 0% 100%);
+    -webkit-clip-path: polygon(0 0, 100% 0%, 86% 100%, 0% 100%);
+    -moz-clip-path: polygon(0 0, 100% 0%, 86% 100%, 0% 100%);
+}
+.enroll.un-enroll {
+    font-size: 14px;
+    top: 0;
+    background-color: #fff;
+    padding: 1px 25px 1px 25px;
+    color: #fff;
+    clip-path: polygon(0 0, 100% 0%, 86% 100%, 0% 100%);
+    -webkit-clip-path: polygon(0 0, 100% 0%, 86% 100%, 0% 100%);
+    -moz-clip-path: polygon(0 0, 100% 0%, 86% 100%, 0% 100%);
+}
+.btn-unen {
+    background-color: #111112 !important;
+}
+.enroll-2 {
+    position: absolute;
+    top: 8px;
+    left: 15px;
+    font-size: 14px;
+    top: 0;
+    background-color: #40bbef;
+    padding: 1px 25px 1px 25px;
+    color: #fff;
+}
+.page-title h2 {
+    font-size: 22px;
+}
+.model-form {
+    background-color: rgba(0 0 0 / 25%);
+}
+.modal-backdrop {
+    display: none;
+}
+.btn-popup .btn {
+    background-color: #22b1ed;
+    color: #fff;
+    box-shadow: 1px 1px 4px 0px #ddd !important;
+}
+
+.model-form  .modal-dialog {
+    max-width: 800px !important;
+    width: 100% !important;
+}
+.m-title {
+    font-weight: 600;
+}
+.model-form .modal-content {
+    border-radius: 0px !important;
+    border: 0px !important;
+}
+label.input-label {
+    color: #333;
+}
+.rc-form input {
+    border-radius: 0px !important;
+}
+.rc-form select {
+    border-radius: 0px !important;
+}
+
+.model-form .modal-body {
+    padding-left: 45px;
+    padding-right: 45px;
+    padding-top: 25px;
+}
+.model-form .modal-header {
+    margin-left: 45px;
+    margin-right: 45px;
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+} 
+label.input-label span {
+    color: red;
+}
+.btn-model button {
+    border-radius: 0px !important;
+    padding: 8px 22px;
+    border: 0px !important
+}
+.btn-action {
+    background-color: #22b1ed;
+}
+.rc-form input {
+    border-radius: 0px !important;
+}
+.form-group {
+    line-height: unset !important;
+}
+.modal-footer.btn-model {
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+}
+.btn-popup .btn:hover {
+    background-color: #0d6aeb !important;
+    color: #fff !important;
+}
+section.rc360 {
+    background-color: #fff;
+}
+.btn-100
+{
+    width: 100%;
+}
+.dataTables_paginate {
+    float: right;
+    margin-top: 20px;
+}
+.dataTables_info {
+    margin-top: 20px;
+}
+.table td, .table th {
+    padding: .75rem !important;
+}
+
+.card.card-3 {
+    max-width: 25%;
+    margin-right: 4px;
+    margin: auto;
+
+}
+.btn-22 button {
+    margin-right: 4px;
+}
+.model-conform {
+    max-width: 400px;
+    width: 100% !important;
+}
+.model-small {
+    background-color: rgba(27 27 27 / 51%) !important;
+} 
+.sm-card {
+    box-shadow: none !important;
+    border: 0px !important;
+}
