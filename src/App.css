@@ -65,11 +65,11 @@ input::-webkit-inner-spin-button {
 }
  .scroll {
 
-  /* overflow-x: scroll; */
+   overflow-x: scroll; 
 
-  height: 92vh;
+  height: 92vh; 
 
-}
+} 
 ::-webkit-scrollbar {
 
   width: 0px;

@@ -318,7 +318,7 @@ group() {
               Role Created.
 
               <button type="button" class="close" data-dismiss="alert" aria-label="close"></button></div>
-            <form>
+            <form >
               <div style={{ padding: '20px' }} class="form-group">
                 <div style={{ display: 'flex' }}>
                   <p style={{ width: '50%', fontWeight: '500' }}>Role Name<span style={{ color: 'red' }}>*</span></p>

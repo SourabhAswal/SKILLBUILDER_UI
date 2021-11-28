@@ -13,6 +13,13 @@ class CourseFormService extends Component {
             multipart: true
         });
     }
+    enrolledcourseGraph() {
+        return request({
+            url: `${API_BASE_URL}enrolledcoursegraph/`,
+            method: 'GET',
+            multipart: true
+        });
+    }
 
     createCourse(formdata) {
         return request({

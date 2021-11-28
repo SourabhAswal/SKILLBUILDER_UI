@@ -819,8 +819,8 @@ export default class CourseTable extends Component {
           aria-labelledby="exampleModalLabel2"
           aria-hidden="true"
         >
-          <div class="modal-dialog" role="document">
-            <div class="modal-content">
+          <div class="modal-dialog" style={{marginRight:"25%"}} role="document">
+            <div style={{width:"120%"}} class="modal-content">
               <div class="modal-header">
                 <h5 class="modal-title m-title" id="exampleModalLabel">
                   Update Course
@@ -1018,7 +1018,7 @@ export default class CourseTable extends Component {
                           />
 
                           <span
-                            style={{ border: "1px solid ", padding: "0.75rem" }}
+                            style={{  border: "1px solid ", padding: "0.75rem" ,marginLeft:"0%" }}
                             className="ms-3"
                             id="erreditvideo"
                           >

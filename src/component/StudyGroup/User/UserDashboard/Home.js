@@ -157,16 +157,18 @@ export default class Home extends Component {
       i = i + 1
       if (i < 4) {
 
-        return (<>{this.state.view == 0 &&
-          // div className=" card   mt-3 mr-5 " style={{ width:'20vh', height:'', marginRight: "200%", marginLeft: "-1%" }} >
+        return (<> {this.state.view == 0 &&
+          <div class="col-md-2">
+            <div class="tech-icon wow fadeInUp">
+              <img src={grp.imagess} alt="img" />
+              <h4>{grp.gpName}</h4>
+              <button  class="btn btn-primary btn-learn">Join</button>
+              {/* value={grp.gpName +"/" +grp.id} onClick={this.subscribe} */}
 
-          <div className="card  mt-1" style={{ width: '200px', height: "140px" }} >
-            <h5 className="card-title mt-1" style={{ textAlign: "center", fontSize: "30px", color: "#22b1ed" }}>  {grp.gpName}</h5>
-            {/* <h5 className="card-title mx-auto mt-1" style={{color: "#22b1ed", fontSize: "150%", fontWeight: "bold" }}>{grp.gpName}</h5> */}
+            </div>
 
-            <img clasName="mx-auto" src={grp.imagess} style={{ borderColor: "#6e707e", width: "30%", height: "60%", marginLeft: "37%", marginBottom: "7%" }} alt="" />
-
-          </div>}</>)
+          </div>}
+</>)
       }
 
 
@@ -193,29 +195,35 @@ export default class Home extends Component {
       if (grp.user_ID.id == new Encryption().decrypt(encryptedData).userId) {
         flag++
         return (
+
           <>{this.state.view == 0 &&
             <React.Fragment>
               {flag == 1 &&
-                <p style={{ color: "black", fontSize: "120%", fontWeight: "bold" }} className="text-gray-800">Subscribed Groups</p>
+                <p style={{ color: "black", fontSize: "120%", fontWeight: "bold" }}>Subscribed Groups-</p>
               }
-              <div className="card card-3">
-                <div className="card-body">
-                  {console.log(grp.grp_ID.imagess)}
-                  {/* <p className="ml-auto" >{role}</p> */}
-                  <h3 className="card-title" style={{ marginRight: "0%", fontSize: "170%", fontWeight: "bold", textAlign: "center", color: "grey" }}>{grp.grp_ID.gpName}</h3>
-                  <img clasName="mx-auto" src={grp.grp_ID.imagess} style={{ borderColor: "#6e707e", width: "21%", height: "55px", marginLeft: "40%", marginBottom: "7%" }} alt="" />
-                  <br></br>
-                  <div className="btn-22 text-center">
-                    <a href={"Chat/" + grp.grp_ID.gpName + "/" + grp.grp_ID.id + "/" + new Encryption().decrypt(encryptedData).username}  >
-                      <button className="btn btn-primary btnStyle" >Enter</button>
-                    </a>
-                    {/* <button type="button" value={grp.id} onClick={this.ExitConfirm} className="btn btn-primary btnStyle " >Exit</button> */}
-                  </div>
-                </div>
-              </div>
-            </React.Fragment>
+
+
+                    
+
+                    <div class="col-md-2 ">
+                      <div class="tech-icon wow fadeInUp dash">
+
+
+
+                      <img src={grp.grp_ID.imagess} ></img>
+                      <h3 class="title-logo">{grp.grp_ID.gpName}</h3>
+                      <a href={"Chat/" + grp.grp_ID.gpName + "/" + grp.grp_ID.id + "/" + new Encryption().decrypt(encryptedData).username} class="btn btn-primary btn-learn ">ENTER</a>
+                     <br/><a> <button value={grp.id} onClick={this.ExitConfirm} class="btn btn-primary btn-learn ">&nbsp;&nbsp;EXIT&nbsp;&nbsp;</button></a>
+                       
+                    </div>
+                  
+                  
+               </div>
+                         </React.Fragment>
           }</>
+
         )
+
       }
     })
     if (localStorage.getItem("encrypted") !== null && new Encryption().decrypt(encryptedData).default_role === "Student")
@@ -289,7 +297,7 @@ export default class Home extends Component {
             <div class="row" style={{ justifyContent: 'space-evenly', marginRight: "auto" }}>
               {rows2}
               <Link to={{ pathname: "/allgroup", state: { from: this.props.location } }} type="url" style={{ fontSize: "130%", marginBottom: "4%", marginLeft: "180%" }}          // onclick={this.props.test()} 
-              ><button className="btn" style={{backgroundColor:"#22b1ed",color:"#fff"}}>View More</button></Link>
+              ><button className="btn btn-primary btn-learn">View More</button></Link>
             </div>
           </div>
           <br></br>

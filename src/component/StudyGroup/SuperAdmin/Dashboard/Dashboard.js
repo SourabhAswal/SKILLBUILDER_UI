@@ -11,8 +11,16 @@ import moment from "moment"
 import { Link } from 'react-router-dom';
 import ReactApexChart from "react-apexcharts";
 import '../../../../common/loader.css'
+
+import FusionCharts from "fusioncharts";
+import charts from "fusioncharts/fusioncharts.charts";
+import ReactFusioncharts from "react-fusioncharts";
+
 import { API_BASE_URL, EMAIL_URL } from '../../../../constants';
 import Chart from "react-google-charts";
+import CourseFormService from '../../../Course/courseFormService';
+
+charts(FusionCharts);
 
 
 const { SearchBar } = Search;
@@ -22,6 +30,7 @@ const defaultSorted = [
     order: "asc"
   }
 ];
+
 var i = 1;
 export default class DashboardAdmin extends Component {
   constructor() {
@@ -53,8 +62,118 @@ export default class DashboardAdmin extends Component {
       groupcreated: [],
       userCreated: 0,
       totalUser: '',
+      activeuser: "",
+      totalcourse: "",
       totalGroup: '',
       pendingReuest: '',
+      dataSourcestudy: {
+        chart: {
+          showCanvasBase: "0",
+          canvasbgColor: "#ffffff",
+          canvasbgAlpha: "10",
+          caption: "Monthly Report of Groups,Members & Messages",
+          subcaption: "2021-2022",
+          xaxisname: "Groups",
+          yaxisname: "Count of Messages & Users",
+          formatnumberscale: "1",
+          plottooltext:
+            "<b>$dataValue</b> $seriesname are available on <b>$label</b> Group ",
+          theme: "Candy",
+          drawcrossline: "1",
+          // palettecolors: "5d62b5,29c3be,f2726f",
+          // bgColor: "white",
+        },
+        categories: [
+          {
+            category: [
+
+            ]
+          }
+        ],
+        dataset: [
+          {
+            seriesname: "Message",
+            data: [
+
+            ]
+          },
+          {
+            seriesname: "User",
+            data: [
+
+            ]
+          },
+        ]
+      },
+
+      dataSourcepie: {
+        chart: {
+          caption: "Admins & there No. Of Groups",
+          subcaption: "2021-2022",
+          showvalues: "1",
+          showpercentintooltip: "0",
+          // numberprefix: "$",
+          enablemultislicing: "1",
+          theme: "fusion"
+        },
+        data: []
+      },
+      dataSource: {
+        chart: {
+          showCanvasBase: "0",
+          canvasbgColor: "#ffffff",
+          canvasbgAlpha: "10",
+          // bgColor: "#DDDDDD",
+
+          caption: "Courses and their Enrolled User",
+          // subcaption: "For the year 2017",
+          yaxisname: "Number of User Enrolled in courses",
+          decimals: "1",
+          theme: "candy"
+        },
+        data: []
+      },
+
+      dataSource2: {
+        chart: {
+          showCanvasBase: "0",
+          canvasbgColor: "#ffffff",
+          canvasbgAlpha: "10",
+          // bgColor: "#DDDDDD",
+
+          caption: "Completed Courses per Enrolled User",
+          // subcaption: "For the year 2017",
+          yaxisname: "Number of User Completed the courses",
+          decimals: "1",
+          theme: "candy"
+        },
+        data: [
+
+          {
+            label: "Python",
+            value: "5"
+          },
+          {
+            label: "React",
+            value: "1"
+          },
+          {
+            label: "JAVA",
+            value: "2"
+          },
+          {
+            label: "HTML5",
+            value: "8"
+          },
+          {
+            label: "C++",
+            value: "6"
+          }
+
+        ]
+      },
+
+
       groupcreated: [],
       adminDetails: [],
       adminDetailsagain: [],
@@ -90,6 +209,10 @@ export default class DashboardAdmin extends Component {
         name: 'Message',
         data: [21, 7, 25, 13, 22, 8]
       }],
+
+
+
+
       options: {
         chart: {
           type: 'bar',
@@ -161,6 +284,7 @@ export default class DashboardAdmin extends Component {
   }
 
   componentDidMount() {
+    this.enrolledcourseGraph()
     this.graphData();
     // document.getElementById('pageDropDown').classList.add('btn-sm');
     // document.getElementById('search-bar-0').style.height = '35px'
@@ -176,14 +300,112 @@ export default class DashboardAdmin extends Component {
 
   }
 
+
+  async enrolledcourseGraph() {
+    await CourseFormService.enrolledcourseGraph().then((Data) => {
+      console.log(Data);
+      let obj = []
+      for (let i = 0; i < (Data.count.users.length); i++) {
+        obj.push(
+          {
+            label: Data.count.courses[i],
+            value: Data.count.users[i]
+          }
+        )
+      }
+      console.log(obj);
+      this.setState({
+        dataSource: {
+          ...this.state.dataSource,
+          data: obj
+        }
+      })
+    });
+  }
+
   graphData() {
     fetch(API_BASE_URL + 'graph')
       .then(response => response.json())
       .then((data) => {
         console.log(data)
+        console.log(data[0].pieChart.name)
+        let obj = []
+        let obj1 = []
+        let obj2 = []
+        let obj3 = []
+        var x = data[0].graph[0].group
+        for (let i = 0; i < x.length; i++) {
+          obj.push(
+            {
+              label: x[i],
+              // value:x[i]
+            }
+          )
+        };
+        for (let j = 0; j < data[0].graph[0].message.length; j++) {
+          obj1.push(
+            {
+              value: data[0].graph[0].message[j]
+            }
+          )
+        }
+        for (let k = 0; k < data[0].graph[0].user.length; k++) {
+          obj2.push(
+            {
+              value: data[0].graph[0].user[k]
+            }
+          )
+        }
+        for (let l = 0; l < data[0].pieChart.name.length; l++) {
+          obj3.push(
+            {
+              label: data[0].pieChart.name[l],
+              value: data[0].pieChart.noOfGp[l]
+            }
+          )
+          console.log(obj)
+        }
+        console.log(obj)
+        this.setState({
+
+          dataSourcestudy: {
+
+            ...this.state.dataSourcestudy,
+
+            categories: [
+              {
+                category: obj,
+              }
+            ],
+            dataset: [
+              {
+                seriesname: "Message",
+                data: obj1
+              },
+              {
+                seriesname: "Users",
+                data: obj2
+              },
+            ]
+
+          }
+
+        })
+
+        this.setState({
+          dataSourcepie: {
+
+            ...this.state.dataSourcepie,
+            data: obj3,
+          }
+
+        })
+
 
         this.setState({
           totalUser: data[0].card.user,
+          activeuser: data[0].card.activeuser,
+          totalcourse: data[0].card.course,
           totalGroup: data[0].card.group,
           pendingReuest: data[0].card.request,
           groupcreated: data[0].card.groupCreated,
@@ -204,14 +426,9 @@ export default class DashboardAdmin extends Component {
         })
 
         this.setState({
-          options: {
-            ...this.state.options,
-            xaxis: {
-              ...this.state.options.xaxis,
-              categories: data[0].graph[0].group
-            }
-          }
+          groups: data[0].graph[0].group
         })
+        console.log(this.state.groups)
 
         this.setState({
           seriesPie: data[0].pieChart.noOfGp
@@ -227,6 +444,7 @@ export default class DashboardAdmin extends Component {
       )
       .catch(error => console.log(error))
   }
+
 
   finddate() {
 
@@ -532,7 +750,7 @@ export default class DashboardAdmin extends Component {
         </div>
 
         <div class="row mb-3">
-          <div class="col-xl-3 col-md-6 mb-4">
+          <div class="col-xl-4 col-md-6 mb-4">
             <div class="card h-100">
               <div class="card-body">
                 <div class="row align-items-center">
@@ -541,7 +759,7 @@ export default class DashboardAdmin extends Component {
                     <div class="h5 mb-0 font-weight-bold text-gray-800">{this.state.totalUser}</div>
                     <div class="mt-2 mb-0 text-muted text-xs">
                       <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> {this.state.userCreated}</span>
-                      <span>Register User </span>
+                      <span>Registered User</span>
                     </div>
                   </div>
                   <div class="col-auto">
@@ -552,61 +770,41 @@ export default class DashboardAdmin extends Component {
             </div>
           </div>
 
-          <div class="col-xl-3 col-md-6 mb-4">
+          <div class="col-xl-4 col-md-6 mb-4">
             <div class="card h-100">
               <div class="card-body">
                 <div class="row no-gutters align-items-center">
                   <div class="col mr-2">
-                    <div class="text-xs font-weight-bold text-uppercase mb-1"><h6>Group</h6></div>
-                    <div class="h5 mb-0 font-weight-bold text-gray-800">{this.state.totalGroup}</div>
+                    <div class="text-xs font-weight-bold text-uppercase mb-1"><h6>Active Users</h6></div>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800">{this.state.activeuser}</div>
                     <div class="mt-2 mb-0 text-muted text-xs">
                       <span class="text-success mr-2"><i class="fas fa-arrow-up"></i> {this.state.groupcreated}</span>
-                      <span>Group Created</span>
+                      <span>Total Courses</span>
                     </div>
                   </div>
                   <div class="col-auto">
-                    <i class="fas fa-shopping-cart fa-2x text-success"></i>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card h-100">
-              <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                  <div class="col mr-2">
-                    <div class="text-xs font-weight-bold text-uppercase mb-1"><h6>Admin</h6></div>
-                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{this.state.totalAdmin}</div>
-                    <div class="mt-2 mb-0 text-muted text-xs">
-                      <span class="text-success mr-2"><i class="fas fa-arrow-up"></i> 2</span>
-                      <span>Since last month</span>
-                    </div>
-                  </div>
-                  <div class="col-auto">
-                    <i class="fas fa-users fa-2x text-info"></i>
+                    <i class="fa fa-user fa-2x text-danger"></i>
                   </div>
                 </div>
               </div>
             </div>
           </div>
 
-          <div class="col-xl-3 col-md-6 mb-4">
+          <div class="col-xl-4 col-md-6 mb-4">
             <div class="card h-100">
-              <div class="card-body" >
+              <div class="card-body">
                 <div class="row no-gutters align-items-center">
-                  <div class="col " >
-                    <div class="text-xs font-weight-bold text-uppercase mb-1">
-                      <Link href={() => this.props.approve()} onClick={() => this.props.approve()}>Pending Requests</Link>
-                    </div>
-                    <div class="h5 mb-0 font-weight-bold text-gray-800">{this.state.pendingReuest}</div>
+                  <div class="col mr-2">
+                    <div class="text-xs font-weight-bold text-uppercase mb-1"><h6>courses</h6></div>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800">{this.state.totalcourse}</div>
                     <div class="mt-2 mb-0 text-muted text-xs">
-                      <span class="text-danger mr-2"><i class="fas fa-arrow-down"></i> 1</span>
-                      <span>Since yesterday</span>
+                      <span class="text-success mr-2"><i class="fas fa-arrow-up"></i> {this.state.groupcreated}</span>
+                      <span>Total Courses</span>
                     </div>
                   </div>
                   <div class="col-auto">
-                    <i class="fas fa-comments fa-2x text-warning"></i>
+                    {/* <i class="fas fa-shopping-cart fa-2x text-success"></i> */}
+                    <i class="fa fa-book fa-2x text-success"></i>
                   </div>
                 </div>
               </div>
@@ -615,23 +813,104 @@ export default class DashboardAdmin extends Component {
         </div>
 
         <div className="row">
+          <h3 style={{ padding: "10px 5px 5px 450px", fontWeight: 'bold' }}>Course Data</h3>
           <div className="col-xl-6 col-md-12">
             <div className="card" id="chart" style={{ width: "100%" }}>
-              <h5 className="card-header">Monthly Report</h5>
+              {/* <h5 className="card-header">Enrolled Course Report</h5> */}
               <div className="card-body">
-                <ReactApexChart options={this.state.options} series={this.state.series} type="bar" width="100%" />
+                {/* <ReactApexChart options={this.state.optionsEnrolled} series={this.state.seriesEnrolled} type="bar"  width="100%"/> */}
+                <ReactFusioncharts
+                  type="column3d"
+                  width="100%"
+                  height="350%"
+                  dataFormat="JSON"
+                  dataSource={this.state.dataSource}
+                />
               </div>
             </div>
           </div>
 
           <div className="col-xl-6 col-md-12">
-            <div className="card" id="chart" style={{ width: "84%" }}>
-              <h5 className="card-header">No. of groups where user is admin</h5>
+            <div className="card" id="chart" style={{ width: "100%" }}>
+              {/* <h5 className="card-header">Completed Course Report</h5> */}
               <div className="card-body">
-                <ReactApexChart options={this.state.optionsPie} series={this.state.seriesPie} type="pie" width="100%" />
+                {/* <ReactApexChart options={this.state.optionsEnrolled} series={this.state.seriesEnrolled} type="bar"  width="100%"/> */}
+                <ReactFusioncharts
+                  type="column3d"
+                  width="100%"
+                  height="350%"
+                  dataFormat="JSON"
+                  dataSource={this.state.dataSource2}
+                />
               </div>
             </div>
           </div>
+          <h3 style={{ padding: "10px 5px 5px 450px", fontWeight: 'bold' }}>Study Group</h3>
+          <div className="col-xl-6 col-md-12">
+            <div className="card" id="chart" style={{ width: "100%" }}>
+              {/* <h5 className="card-header">Completed Course Report</h5> */}
+              <div className="card-body">
+                {/* <ReactApexChart options={this.state.optionsEnrolled} series={this.state.seriesEnrolled} type="bar"  width="100%"/> */}
+                <ReactFusioncharts
+                  type="mscolumn3d"
+                  width="100%"
+                  height="350%"
+                  dataFormat="JSON"
+                  dataSource={this.state.dataSourcestudy}
+                />
+              </div>
+            </div>
+          </div>
+          {/* <h3 style={{ padding: "10px 5px 5px 200px", fontWeight: 'bold' }}>Study Group</h3> 
+          <div className="card-body" style={{ marginLeft: "-1%" }} >
+            <div >
+              <div className="j" >
+                <ReactFusioncharts
+                  type="mscolumn3d"
+                  width="50%"
+                  height="60%"
+                  dataFormat="JSON"
+                  dataSource={this.state.dataSource}
+                />
+              </div>
+            </div>
+            <div className="hide-mark"></div>
+          </div> */}
+
+          <div className="col-xl-6 col-md-12">
+            <div className="card" id="chart" style={{ width: "100%" }}>
+              {/* <h5 className="card-header">Completed Course Report</h5> */}
+              <div className="card-body">
+                {/* <ReactApexChart options={this.state.optionsEnrolled} series={this.state.seriesEnrolled} type="bar"  width="100%"/> */}
+                <ReactFusioncharts
+                  type="pie3d"
+                  width="100%"
+                  height="350%"
+                  dataFormat="JSON"
+                  dataSource={this.state.dataSourcepie}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* <div className="card-body" style={{ marginLeft: "-1%" }} >
+            <div >
+              <div className="j" >
+                <ReactFusioncharts
+                  type="pie3d"
+                  width="50%"
+                  height="50%"
+                  dataFormat="JSON"
+                  dataSource={this.state.dataSourcepie}
+                />
+              </div>
+            </div>
+            <div className="hide-mark"></div>
+          </div> */}
+
+
+
+
         </div>
 
         {/* <div class="card-footer " style={{ marginTop: "4%", height: "15%", width: "100%", marginBottom: '60px' }} >

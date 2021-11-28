@@ -246,6 +246,7 @@ class CourseMaterial extends Component {
     }
     this.changePptActive();
     this.getSubsectionData(this.state.subSectionId);
+    console.log(this.state.videoPopUpData.length)
     this.showPresentation();
     this.updateVisitedStatus();
   }
@@ -301,6 +302,7 @@ class CourseMaterial extends Component {
         })
       }
       if (res.sections.length != 0 && subSec.length != 0) {
+        console.log(res.sections[0].subSection[0].id)
         this.setState({
           course_desc: res.course_des,
           course_img: res.course_img,
@@ -347,6 +349,7 @@ class CourseMaterial extends Component {
   }
 
   getSubsectionData(id) {
+    console.log(id)
     let allPptSubSections = []
     let allPdfSubSections = []
     let allAssignmentSubSections = []
@@ -390,8 +393,10 @@ class CourseMaterial extends Component {
       })
     });
     allVideoSubSections.map((x) => {
+      console.log(x)
       x.map((data) => {
         if (data != null && data != undefined && data.courseSubSection == id) {
+          console.log("Harsh")
           allVideo.push(data.subVideo);
           video.push(data);
         }
@@ -412,6 +417,7 @@ class CourseMaterial extends Component {
   }
 
   addPopUpButton(ppt, pdf, video) {
+    console.log((video))
     if (ppt.length == 1) {
       if (ppt[0].external == true) {
         this.setState({
@@ -480,7 +486,6 @@ class CourseMaterial extends Component {
         })
       }
     }
-    else {
       var videoPopUp = video.map((x, i) => {
         return (
           x.popUpButton = (
@@ -498,7 +503,8 @@ class CourseMaterial extends Component {
           )
         )
       })
-    }
+    
+    console.log("helloooooo"+videoPopUp)
     this.setState({
       pptPopUpData: pptPopUp,
       pdfPopUpData: pdfPopUp,

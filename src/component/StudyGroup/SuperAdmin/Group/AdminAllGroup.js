@@ -468,10 +468,10 @@ export default class AdminAllGroup extends Component {
                     <input ref={this.myRef1} style={{ height: '35px' }} defaultValue={this.state.rows1.description} type="text" class="form-control" id="2" placeholder="About group" />
                   </div>
 
-                  <div style={{ display: 'flex' }}>
+                  {/* <div style={{ display: 'flex' }}>
                     <p style={{ width: '50%', fontWeight: '500', padding: "1%" }}>Wiki Link<span style={{ color: 'red' }}>*</span></p>
-                    <input ref={this.myRef2} style={{ height: '35px' }} defaultValue={this.state.rows1.link} type="url" class="form-control" id="3" placeholder="wikipedia link" />
-                  </div>
+                    <input ref={this.myRef2} style={{ height: '35px' }} defaultValue={this.state.rows1.link} type="url" class="form-control" id="3"  />
+                  </div> */}
                   <div style={{ display: 'flex' }}>
                     <p style={{ width: '50%', fontWeight: '500', padding: "1%" }}>Current Admin<span style={{ color: 'red' }}>*</span></p>
                     <input ref={this.myRef5} disabled id="test" style={{ height: '35px', backgroundColor: "white" }} id="4" value={this.state.name} type="url" class="form-control" placeholder="Group Admin" />

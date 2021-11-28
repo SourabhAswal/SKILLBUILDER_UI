@@ -191,7 +191,17 @@ export default class AllGroup extends Component {
     <div id="wrapper">
       
                 <div class="row ml-2 mt-1" style={{width:'auto'}}>
-      {rows}</div>
+
+                  
+
+      {rows}
+      
+      
+      
+      
+      
+      
+      </div>
       </div>
       
   </div>

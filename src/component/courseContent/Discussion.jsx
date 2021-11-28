@@ -365,7 +365,7 @@ export default class Discussion extends React.Component {
         let formData = new FormData();
         formData.append("postId", like.id);
         formData.append("userId", like.user.id);
-        formData.append("name", like.name);
+        formData.append("name", this.state.name);
         DiscussionService.editLike(formData, like.id)
             .then(res => {
                 if (res.success === 'False')

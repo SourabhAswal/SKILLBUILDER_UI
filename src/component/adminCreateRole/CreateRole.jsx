@@ -245,26 +245,34 @@ class CreateRole extends Component {
 
             return (
                 <div>
-                    <div className='card CardClass'>
-                        <div className='HeaderClass'>
-                            Create Role
+                    <div className='card CardClass' class="card" style={{ overflowX: 'auto',height: "auto", margintop:"1px",marginBottom: "1%", marginLeft: "21%",borderRadius:"5px",  marginTop: "15px", width: "50%", marginBottom: '100px' }}>
+                        <div className='HeaderClass' >
+                        <h2 style={{ color: "#6e707e", fontWeight: "bold", marginTop: '1px' }}>Create Role</h2>
                         </div>
+                        
                         <div>
                             <form onSubmit={this.handleCreate} className="FormClass">
-                                <div className='FormDiv '>
-                                    Role name:&nbsp;&nbsp;&nbsp;
+                                <div style ={{display:'flex'}} className='FormDiv '>
+                                <p style={{width:'50%',fontWeight:'500'}}  >Role name<span style={{ color: 'red' }}>*</span>&nbsp;&nbsp;&nbsp;</p>
                                     {this.state.editing === false ?
-                                        <input onChange={this.changeRoleName} pattern="^(?!\s*$).+" required value={this.state.roleName} /> :
+                                        <input placeholder="Role Name " style={{height:'35px', marginBottom:"0px",marginTop:"0px"}} type="text" class="form-control" onChange={this.changeRoleName} pattern="^(?!\s*$).+" required value={this.state.roleName} /> :
                                         <input onChange={this.changeRoleName} disabled value={this.state.roleName} />
                                     }
                                 </div>
-                                <div className='FormDiv'>
-                                    Role type:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                    <input onChange={this.changeRoleType} pattern="^(?!\s*$).+" required value={this.state.roleType} />
+                               
+
+
+
+
+
+
+                                <div style ={{display:'flex'}} className='FormDiv'>
+                                 <p style={{width:'50%',fontWeight:'500'}}  > Role type <span style={{ color: 'red' }}>*</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                                    <input placeholder="Role Type"  style={{height:'35px', marginBottom:"10px",marginTop:"0px"}} type="text" class="form-control" onChange={this.changeRoleType} pattern="^(?!\s*$).+" required value={this.state.roleType} />
                                 </div>
-                                <div className='FormDiv'>
-                                    Role desc:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                    <input onChange={this.changeRoleDesc} pattern="^(?!\s*$).+" required value={this.state.roleDecs} />
+                                <div  style ={{display:'flex'}} className='FormDiv '>
+                                <p style={{width:'50%',fontWeight:'500'}}  > Role desc<span style={{ color: 'red' }}>*</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                                    <input placeholder="Role desc"  style={{height:'35px', marginBottom:"10px",marginTop:"0px"}} type="text" class="form-control" onChange={this.changeRoleDesc} pattern="^(?!\s*$).+" required value={this.state.roleDecs} />
                                 </div>
                                 <button type='submit' class='btn btn-warning' id='submit' className='ButtonClass p-2'>Save</button>
                             </form>

@@ -51,7 +51,8 @@ class LandingPage extends Component {
       return( 
       <div style={{ position: "fixed", left: "48%",top:"9%"}}> 
       <LoadingIndicator />
-      </div>)
+       </div>
+      )
     }
     if (this.state.redirect) {
       return (

@@ -241,7 +241,7 @@ class App extends Component {
               offset={65}
             />
           </div>
-          {page=="/" || page=="/signIn" || page=="/UserDashboard"  ? (<></>):(<><Footer/></>)}
+          {page=="/" || page=="/signIn"   ? (<></>):(<><Footer/></>)}
         </div>
        
       </div>

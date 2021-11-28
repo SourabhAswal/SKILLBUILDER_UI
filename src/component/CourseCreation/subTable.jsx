@@ -494,7 +494,7 @@ else
                     <div className="row">
                       <div className="col-md-12">
                         <div className="form-group">
-                          <label for="inputFirstname">Title</label>
+                          <label style={{marginBottom:"5%"}} for="inputFirstname">Title</label>
                           <input
                             type="text"
                             className="form-control mt-n4 mb-2"
