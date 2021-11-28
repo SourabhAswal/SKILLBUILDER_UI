@@ -312,9 +312,14 @@ else
     
     this.setState({
       sub: "",
-      secId:null,
-      rows:[],
+      // secId:null,
+      // rows:[],
     });
+  }
+  resetsectionId(){
+    this.setState({
+      rows:[],
+      secId:null})
   }
   Secid(e){
     this.setState({ secId: e.target.value });
@@ -357,15 +362,19 @@ else
           aria-labelledby="exampleModalLabel"
           aria-hidden="true"
         >
-           {/* {
+           {
             (window.onclick = (e) => {
             
               if ((e.target.id == "exampleModa3")|| (e.target.id == "exampleModal2")) {
                 this.reset();
+                
               }
+              else if(e.target.id=="subsectionss"){
+                console.log("set null courseid");
+                  this.resetsectionId()}
               
             })
-          } */}
+          }
           <div class="modal-dialog" role="document">
             <div class="modal-content">
               <div class="modal-header">

@@ -135,6 +135,8 @@ class App extends Component {
   }
 
   render() {
+    const page=window.location.pathname;
+
     return (
       <div id="wrapper">
         {this.state.isAuthenticated === true && localStorage.getItem("encrypted") !== null ?
@@ -230,9 +232,7 @@ class App extends Component {
                 
 
               </Switch>
-
             </div>
-
             <Alert
               stack={{ limit: 3 }}
               timeout={3000}
@@ -241,8 +241,7 @@ class App extends Component {
               offset={65}
             />
           </div>
-                       {/* <Footer /> */}
-
+          {page=="/" || page=="/signIn" || page=="/UserDashboard"  ? (<></>):(<><Footer/></>)}
         </div>
        
       </div>

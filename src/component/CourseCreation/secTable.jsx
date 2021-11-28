@@ -83,6 +83,7 @@ else
     // this.validtxt(value)
     // if(this.state.flag==true)
     // {
+      console.log(this.state.courseId);
     this.setState({ title: e.target.value });
   // }
   }
@@ -187,7 +188,7 @@ else
         });
         this.getSecData(this.state.courseId);
         this.getCourseData();
-        Alert.success("Course Section updated");
+        Alert.success("Course Section created");
       break;}
       case "fail": {
         this.setState({
@@ -286,10 +287,10 @@ else
     document.getElementById('selectcourse').options[0].selected=true 
     this.setState({
       title: "",
-      rows:[],
+      // rows:[],
       flag:false,
 
-      courseId:null
+      // courseId:null
     });
   }
   courseid(e){
@@ -297,6 +298,11 @@ else
     this.getSecData(e.target.value)
   
 
+  }
+  resetcourseId(){
+    this.setState({
+       rows:[],
+       courseId:null})
   }
 
   render() {
@@ -329,14 +335,18 @@ else
           aria-labelledby="exampleModalLabel2"
           aria-hidden="true"
         >
-          {/* {
+          {
             (window.onclick = (e) => {
         
               if ((e.target.id == "exampleModal2")|| (e.target.id == "exampleModa2")) {
                 this.reset();
-              }
+              
+            }
+            else if(e.target.id=="sectionss"){
+              console.log("set null courseid");
+                this.resetcourseId()}
             })
-          } */}
+          }
           <div class="modal-dialog" role="document">
             <div class="modal-content">
               <div class="modal-header">
@@ -428,10 +438,8 @@ else
                         <div className="form-group">
                           <select
                               id="selectcourse"
-                              
-                          
-                           onChange={this.courseid.bind(this)}
-                            className="form-select form-control"
+                              onChange={this.courseid.bind(this)}
+                              className="form-select form-control"
                           >
                             <option selected="selected" disabled>
                               Course

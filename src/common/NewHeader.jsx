@@ -91,12 +91,12 @@ class NewHeader extends Component {
       })
     }
 
-//     this.ws.onclose = () => {
-//       // automatically try to reconnect on connection loss
-//       this.setState({
-//         ws: new WebSocket(URL),
-//       })
-//     }
+    // this.ws.onclose = () => {
+    //   // automatically try to reconnect on connection loss
+    //   this.setState({
+    //     ws: new WebSocket(URL),
+    //   })
+    // }
     // this.props.userAuthenticated(true);
     
     this.setState({

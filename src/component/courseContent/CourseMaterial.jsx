@@ -55,7 +55,7 @@ class CourseMaterial extends Component {
       pptData: [],
       isOpenAssignment: false,
       subSectionId: "",
-      lastvisted_subSectionId:"",
+      lastvisted_subSectionId: "",
       subsecname: "",
       section_name: "",
       assignmentFile: null,
@@ -92,9 +92,16 @@ class CourseMaterial extends Component {
       oneRecordPpt: false,
       oneRecordPdf: false,
       curExtVideo: false,
-      popUpExtVideo: ''
+      popUpExtVideo: '',
+      curExtContent: false,
+      extContent: '',
+      extContentPpt: '',
+      oneRecordExternal: false,
+      oneRecordExternalVideo: false,
+      many: false,
+      manyVideo: false
     };
-    
+
     // this.getCourseDesc = this.getCourseDesc.bind(this);
     // this.getCourseSection = this.getCourseSection.bind(this);
     this.setData = this.setData.bind(this);
@@ -110,7 +117,7 @@ class CourseMaterial extends Component {
     // this.showAssignment = this.showAssignment.bind(this);
     // this.onFileChange = this.onFileChange.bind(this);
     // this.finalUploadAssignment = this.finalUploadAssignment.bind(this);
-    
+
   }
   // async componentDidMount() {
   // this.setState({
@@ -214,15 +221,15 @@ class CourseMaterial extends Component {
   //     }
   //   });
   // }
-componentWillUnmount(){
-  this.defaultSubsection();
-  // window.removeEventListener('beforeunload', this.defaultSubsection);
-  // window.addEventListener('beforeunload', this.defaultSubsection);
+  componentWillUnmount() {
+    this.defaultSubsection();
+    // window.removeEventListener('beforeunload', this.defaultSubsection);
+    // window.addEventListener('beforeunload', this.defaultSubsection);
 
-}
+  }
   async componentDidMount() {
-  
-    
+
+
     this.setState({
       loading: true,
     });
@@ -234,8 +241,9 @@ componentWillUnmount(){
       loading: false
     });
     console.log(this.state.subSectionId);
-    if(this.state.subSectionId !== ''){
-    document.getElementById(this.state.subSectionId).style.color='#495057'}
+    if (this.state.subSectionId !== '') {
+      document.getElementById(this.state.subSectionId).style.color = 'brown'
+    }
     this.changePptActive();
     this.getSubsectionData(this.state.subSectionId);
     this.showPresentation();
@@ -251,35 +259,35 @@ componentWillUnmount(){
       }
     }
   }
-  async defaultSubsection(){
+  async defaultSubsection() {
     const formdata = new FormData;
     formdata.append('id', localStorage.getItem('course_id'))
     formdata.append('subsection_id', this.state.subSectionId)
     await CourseContentService.defaultsubId(formdata).then((res) => {
-  });
-}
-
-async ChangedefaultSubsection(){
-  await CourseContentService.setdefaultsubId(localStorage.getItem('course_id')).then((res) => {
-    console.log(res);
-    // switch(res.status){
-    //  case 'true':{  
-      if(res.length!==0){
-      this.setState({
-      subSectionId:res[0].subsection_id
-
-    })
-   
+    });
   }
-  
-  // }
-// }
-    console.log(this.state.subSectionId); 
-    console.log(localStorage.getItem('course_id'));
-  });
-  // this.changesubColor(this.state.subSectionId)
 
-}
+  async ChangedefaultSubsection() {
+    await CourseContentService.setdefaultsubId(localStorage.getItem('course_id')).then((res) => {
+      console.log(res);
+      // switch(res.status){
+      //  case 'true':{  
+      if (res.length !== 0) {
+        this.setState({
+          subSectionId: res[0].subsection_id
+
+        })
+
+      }
+
+      // }
+      // }
+      console.log(this.state.subSectionId);
+      console.log(localStorage.getItem('course_id'));
+    });
+    // this.changesubColor(this.state.subSectionId)
+
+  }
   async getCourseCompleteData() {
     await CourseContentService.getCompleteData(localStorage.getItem('course_id')).then((res) => {
       console.log(res);
@@ -303,7 +311,7 @@ async ChangedefaultSubsection(){
           sections: res.sections,
           subsections: subSec,
           subSectionId: res.sections[0].subSection[0].id,
-          });
+        });
       }
       else {
         this.setState({
@@ -405,9 +413,17 @@ async ChangedefaultSubsection(){
 
   addPopUpButton(ppt, pdf, video) {
     if (ppt.length == 1) {
-      this.setState({
-        popUpPpt: ppt[0].ppt
-      })
+      if (ppt[0].external == true) {
+        this.setState({
+          extContentPpt: ppt[0].ppt,
+          oneRecordExternal: true
+        });
+      }
+      else {
+        this.setState({
+          popUpPpt: ppt[0].ppt,
+        });
+      }
     }
     var pptPopUp = ppt.map((x, i) => {
       return (
@@ -418,7 +434,7 @@ async ChangedefaultSubsection(){
                 <h5> {x.display_name}</h5>
               </div>
               <div className="col-6">
-                <button className="btn btn-md btn-primary mb-3" onClick={this.getCurrentPpt.bind(this, x.ppt)}>View</button>
+                <button className="btn btn-md btn-primary mb-3" onClick={this.getCurrentPpt.bind(this, x.ppt, x.external)}>View</button>
               </div>
             </div>
             <hr />
@@ -441,7 +457,7 @@ async ChangedefaultSubsection(){
                 <h5>{x.display_name}</h5>
               </div>
               <div className="col-6">
-                <button className="btn btn-md btn-primary mb-3" onClick={this.getCurrentPdf.bind(this, x.pdf)}>View</button>
+                <button className="btn btn-md btn-primary mb-3" onClick={this.getCurrentPdf.bind(this, x.pdf, x.external)}>View</button>
               </div>
             </div>
             <hr />
@@ -451,9 +467,18 @@ async ChangedefaultSubsection(){
     })
 
     if (video.length == 1) {
-      this.setState({
-        popUpVideo: video[0].subVideo
-      })
+      if (video[0].external == true) {
+        let fixVid = video[0].subVideo.replace('watch?v=', 'embed/')
+        this.setState({
+          oneRecordExternalVideo: true,
+          popUpExtVideo: fixVid
+        })
+      }
+      else {
+        this.setState({
+          popUpVideo: video[0].subVideo
+        })
+      }
     }
     else {
       var videoPopUp = video.map((x, i) => {
@@ -481,19 +506,34 @@ async ChangedefaultSubsection(){
     })
   }
 
-  getCurrentPdf(pdf) {
-    this.setState({
-      curPdf: true,
-      popUpPdf: pdf
-    })
-    
+  getCurrentPdf(pdf, external) {
+    if (external == false) {
+      this.setState({
+        curPdf: true,
+        popUpPdf: pdf
+      })
+    }
+    else {
+      this.setState({
+        curExtContent: true,
+        extContent: pdf
+      })
+    }
   }
 
-  getCurrentPpt(ppt) {
-    this.setState({
-      curPpt: true,
-      popUpPpt: ppt
-    })
+  getCurrentPpt(ppt, external) {
+    if (external == false) {
+      this.setState({
+        curPpt: true,
+        popUpPpt: ppt
+      })
+    }
+    else {
+      this.setState({
+        extContentPpt: ppt,
+        many: true
+      })
+    }
   }
 
   getCurrentVideo(video, external) {
@@ -507,21 +547,22 @@ async ChangedefaultSubsection(){
       let fixVid = video.replace('watch?v=', 'embed/')
       this.setState({
         curExtVideo: true,
+        manyVideo: true,
         popUpExtVideo: fixVid
       })
     }
   }
-  changesubColor(id){
-    
+  changesubColor(id) {
+
     console.log(this.state.subSectionId);
     console.log(id);
-    if(id!==this.state.subSectionId){
-    document.getElementById(id).style.color = "#495057";
-    document.getElementById(this.state.subSectionId).style.color = "#22B1EE";
+    if (id !== this.state.subSectionId) {
+      document.getElementById(id).style.color = "brown";
+      document.getElementById(this.state.subSectionId).style.color = "#22B1EE";
     }
-   
-   
-}
+
+
+  }
   idAssignment(id, sub, sec) {
     this.changesubColor(id)
     this.setState({
@@ -537,7 +578,7 @@ async ChangedefaultSubsection(){
       oneRecordPpt: false,
       oneRecordPdf: false
     });
-   this.changesubColor(id)
+    this.changesubColor(id)
     this.getSubsectionData(id);
   }
 
@@ -555,7 +596,10 @@ async ChangedefaultSubsection(){
           tabledata: [],
           oneRecord: false,
           oneRecordPpt: false,
-          oneRecordPdf: false
+          oneRecordPdf: false,
+          oneRecordExternal: false,
+          oneRecordExternalVideo: false
+
         })
       }
       if (this.state.tabledata.length != 0) {
@@ -568,7 +612,7 @@ async ChangedefaultSubsection(){
           viewVideo: false,
           oneRecord: false,
           oneRecordPpt: false,
-          oneRecordPdf: false
+          oneRecordPdf: false,
         });
       }
     }
@@ -621,22 +665,44 @@ async ChangedefaultSubsection(){
           oneRecord: false,
           oneRecordPpt: false,
           manyRecords: true,
-          oneRecordPdf: false
+          oneRecordPdf: false,
+          oneRecordExternal: false,
+          oneRecordExternalVideo: false
         });
       }
       if (this.state.pptData.length == 1) {
-        this.setState({
-          viewVideo: false,
-          viewPdf: false,
-          viewPresentation: true,
-          isOpenAssignment: false,
-          videoNotUploaded: false,
-          videoMessage: '',
-          manyRecords: false,
-          oneRecordPpt: true,
-          oneRecord: false,
-          oneRecordPdf: false
-        });
+        if (this.state.pptData[0].includes('storage.googleapis')) {
+          this.setState({
+            viewVideo: false,
+            viewPdf: false,
+            viewPresentation: true,
+            isOpenAssignment: false,
+            videoNotUploaded: false,
+            videoMessage: '',
+            manyRecords: false,
+            oneRecordPpt: true,
+            oneRecord: false,
+            oneRecordPdf: false,
+            oneRecordExternal: false,
+            oneRecordExternalVideo: false
+          });
+        }
+        else {
+          this.setState({
+            viewVideo: false,
+            viewPdf: false,
+            viewPresentation: true,
+            isOpenAssignment: false,
+            videoNotUploaded: false,
+            videoMessage: '',
+            manyRecords: false,
+            oneRecordPpt: true,
+            oneRecord: false,
+            oneRecordPdf: false,
+            oneRecordExternal: true,
+            oneRecordExternalVideo: false
+          });
+        }
       }
       if (this.state.pptData.length == 0) {
         this.setState({
@@ -649,7 +715,9 @@ async ChangedefaultSubsection(){
           oneRecord: false,
           oneRecordPpt: false,
           manyRecords: true,
-          oneRecordPdf: false
+          oneRecordPdf: false,
+          oneRecordExternal: false,
+
         })
       }
     }
@@ -671,7 +739,8 @@ async ChangedefaultSubsection(){
           oneRecord: false,
           oneRecordPpt: false,
           oneRecordPdf: false,
-          manyRecords: true
+          manyRecords: true,
+
         });
       }
       if (this.state.pdfData.length == 1) {
@@ -685,7 +754,8 @@ async ChangedefaultSubsection(){
           oneRecord: false,
           oneRecordPpt: false,
           oneRecordPdf: true,
-          manyRecords: false
+          manyRecords: false,
+
         });
       }
       if (this.state.pdfData.length == 0) {
@@ -699,7 +769,8 @@ async ChangedefaultSubsection(){
           oneRecord: false,
           oneRecordPpt: false,
           manyRecords: true,
-          oneRecordPdf: false
+          oneRecordPdf: false,
+
         })
       }
     }
@@ -722,22 +793,41 @@ async ChangedefaultSubsection(){
           oneRecord: false,
           oneRecordPpt: false,
           oneRecordPdf: false,
+
         });
       }
       if (this.state.videoData.length == 1) {
-        this.setState({
-          viewVideo: true,
-          viewPdf: false,
-          viewPresentation: false,
-          isOpenAssignment: false,
-          videoNotUploaded: false,
-          videoMessage: '',
-          manyRecords: false,
-          oneRecord: true,
-          oneRecordPpt: false,
-          oneRecordPdf: false
-        });
+        if (this.state.videoData[0].includes('storage.googleapis')) {
+          this.setState({
+            viewVideo: true,
+            viewPdf: false,
+            viewPresentation: false,
+            isOpenAssignment: false,
+            videoNotUploaded: false,
+            videoMessage: '',
+            manyRecords: false,
+            oneRecord: true,
+            oneRecordPpt: false,
+            oneRecordPdf: false,
+          });
+        }
+        else {
+          this.setState({
+            viewVideo: true,
+            viewPdf: false,
+            viewPresentation: false,
+            isOpenAssignment: false,
+            videoNotUploaded: false,
+            videoMessage: '',
+            manyRecords: false,
+            oneRecord: true,
+            oneRecordPpt: false,
+            oneRecordPdf: false,
+            oneRecordExternalVideo: true
+          })
+        }
       }
+
       if (this.state.videoData.length == 0) {
         this.setState({
           videoMessage: "No Video available for this subsection",
@@ -749,7 +839,8 @@ async ChangedefaultSubsection(){
           oneRecord: false,
           manyRecords: true,
           oneRecordPpt: false,
-          oneRecordPdf: false
+          oneRecordPdf: false,
+
         })
       }
     }
@@ -761,6 +852,9 @@ async ChangedefaultSubsection(){
       curPdf: false,
       curVideo: false,
       curExtVideo: false,
+      curExtContent: false,
+      many: false,
+      manyVideo: false
     })
 
   }
@@ -999,19 +1093,58 @@ async ChangedefaultSubsection(){
   //         openQuiz: true
   //     })
   // }
+  getPptData(flag) {
+    if (flag == true) {
+      return (
+        <div className="card position-fixed"
+          style={{
+            height: "90vh",
+            width: "42vw",
+            top: "60px",
+            left: "30vw",
+            zIndex: 5,
+            boxShadow: '6px 6px 6px #8e8e8e, -6px -6px 6px #fff'
+          }}>
+          <i class="fas fa-times" style={{ fontSize: '20px', marginLeft: '98%' }} onClick={this.closeWindow}></i><iframe
+            src={this.state.extContentPpt}
+            title="pdf"
+            style={{ width: "100%", height: "800px" }}
+          ></iframe>
+        </div>
+      )
+    }
+  }
+  getVideoData(flag) {
+    if (flag == true) {
+      return (
+        <div className="card position-fixed"
+          style={{
+            height: "70vh",
+            width: "60vw",
+            top: "80px",
+            left: "23vw",
+            zIndex: 5,
+            boxShadow: '6px 6px 6px #8e8e8e, -6px -6px 6px #fff'
+          }}>
+          <i class="fas fa-times" style={{ fontSize: '20px', marginLeft: '98%' }} onClick={this.closeWindow}></i>
+          <iframe width="100%" height="900px" src={this.state.popUpExtVideo} sandbox="allow-forms allow-scripts allow-pointer-lock allow-same-origin allow-top-navigation" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen={true}></iframe>
+        </div>
+      )
+    }
+  }
 
   render() {
     {
       (window.onclick = (e) => {
         console.log(e.target.id);
-  
+
         if (e.target.id === "logout") {
           this.defaultSubsection();
         }
       })
     }
-    
-   
+
+
     if (this.state.loading) {
       return <LoadingIndicator />;
     }
@@ -1020,101 +1153,106 @@ async ChangedefaultSubsection(){
     //         <Redirect to={{ pathname: "/quiz", state: { from: this.props.location }, questions: this.state.questions, options: this.state.options, correct_ans: this.state.correct_ans }} />
     //     )
     // }
-  
+
     const encryptedData = localStorage.getItem("encrypted");
     if (localStorage.getItem("encrypted") !== null && new Encryption().decrypt(encryptedData).default_role === "Student")
       return (
         // <div className="scroll">
-          <div class="container-fluid" id="container-wrapper">
-            <h2 class="heading-2 mb-4">Course Material</h2>
-            <div class="row">
-              <div class="col-sm-8">
-                <div class="card mb-4" style={{ height: "92%" }}>
-                  <div class="card-body course-details">
-                    <div class="row">
-                      <div class="col-sm-2">
-                        <div class="coures-logo">
-                          <img
-                            src={this.state.course_img}
-                            alt="img"
-                            width="100%"
-                          />
-                        </div>
+        <div class="container-fluid" id="container-wrapper">
+          <h2 class="heading-2 mb-4">Course Material</h2>
+          <div class="row">
+            <div class="col-sm-8">
+              <div class="card mb-4" style={{ height: "92%" }}>
+                <div class="card-body course-details">
+                  <div class="row">
+                    <div class="col-sm-2">
+                      <div class="coures-logo">
+                        <img
+                          src={this.state.course_img}
+                          alt="img"
+                          width="100%"
+                        />
                       </div>
-                      <div class="col-sm-10">
-                        <div class="coures-name p-2">
-                          <h2>{this.state.course_name}</h2>
-                          <p class="small">{this.state.org}</p>
-                          <p class="short-text">{this.state.course_desc} </p>
-                        </div>
-                      </div>
-                      <div class="clear-fix"></div>
                     </div>
+                    <div class="col-sm-10">
+                      <div class="coures-name p-2">
+                        <h2>{this.state.course_name}</h2>
+                        <p class="small">{this.state.org}</p>
+                        <p class="short-text">{this.state.course_desc} </p>
+                      </div>
+                    </div>
+                    <div class="clear-fix"></div>
                   </div>
                 </div>
               </div>
-              {
-      (window.onclick = (e) => {
-        console.log(e.target.id);
-  
-        if (e.target.id === "logout") {
-          this.defaultSubsection();
-        }
-      })
-    }
+            </div>
+            {
+              (window.onclick = (e) => {
+                console.log(e.target.id);
 
-              <div class="col-sm-4">
-                <div class="card mb-4">
-                  <div class="card-body video-in p-0">
-                    <video
-                      // src="https://codingyaar.com/wp-content/uploads/video-in-bootstrap-card.mp4"
-                      src={this.state.course_video}
-                      controls
-                    ></video>
-                  </div>
+                if (e.target.id === "logout") {
+                  this.defaultSubsection();
+                }
+              })
+            }
+
+            <div class="col-sm-4">
+              <div class="card mb-4">
+                <div class="card-body video-in p-0">
+                  <video
+                    // src="https://codingyaar.com/wp-content/uploads/video-in-bootstrap-card.mp4"
+                    src={this.state.course_video}
+                    controls
+                  ></video>
                 </div>
               </div>
-
-              <div class="clear-fix"></div>
             </div>
 
-            {/* <div>
+            <div class="clear-fix"></div>
+          </div>
+
+          {/* <div>
                         <Discussion />
                     </div> */}
 
-            <div class="row">
-              <div class="col-sm-12">
-                <div class="card mb-4">
-                  <div class="card-body course-tab">
-                    <h3 class="heading3">
-                      Getting Started with {this.state.course_name}.
-                    </h3>
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="card mb-4">
+                <div class="card-body course-tab">
+                  <h3 class="heading3">
+                    Getting Started with {this.state.course_name}.
+                  </h3>
 
-                    <div class="row mt-4">
-                      <div class="col-sm-4">
-                        <Accordion defaultActiveKey="0">
-                          {this.state.sectionsAndSubsections.length > 0 ? (
-                            this.state.sectionsAndSubsections.map((data, i) => (
-                              <div class="tab-in">
-                                <Accordion.Toggle
-                                  as={Card.Header}
-                                  eventKey="0"
-                                  class="nav flex-column nav-pills"
-                                  id="v-pills-tab"
-                                  role="tablist"
-                                  aria-orientation="vertical"
-                                >
-                                  <p>
-                                    {i + 1}. {data.section}
-                                  </p>
-                                </Accordion.Toggle>
+                  <div class="row mt-4">
+                    <div class="col-sm-4">
+                      <Accordion defaultActiveKey="0">
+                        {this.state.sectionsAndSubsections.length > 0 ? (
+                          this.state.sectionsAndSubsections.map((data, i) => (
+                            <div class="tab-in">
+                              <Accordion.Toggle
+                                as={Card.Header}
+                                eventKey="0"
+                                class="nav flex-column nav-pills"
+                                id="v-pills-tab"
+                                role="tablist"
+                                aria-orientation="vertical"
+                              >
+                                <p>
+                                  {i + 1}. {data.section}
+                                </p>
+                              </Accordion.Toggle>
 
-                                {data.subsections.length > 0 &&
-                                  data.subsections.map((val, i) => {
-                                    return (
-                                      <Accordion.Collapse eventKey="0" id="subSecCss">
+                              {data.subsections.length > 0 &&
+                                data.subsections.map((val, i) => {
+                                  console.log(val);
+                                  return (
+                                    <Accordion.Collapse eventKey="0" id="subSecCss">
+                                      {val.subVideo.length > 0 ||
+                                        val.ppt.length > 0 ||
+                                        val.pdf.length > 0 ||
+                                        val.assignment > 0 ?
                                         <a
-                                        // style={{textDecoration:"none"}}
+                                          // style={{textDecoration:"none"}}
                                           class="nav-link"
                                           id={val.id}
                                           href="#v-pills-1"
@@ -1126,23 +1264,40 @@ async ChangedefaultSubsection(){
                                           <i class="far fa-angle-double-right"></i>
 
                                           {val.sub}
-                                        </a>
-                                      </Accordion.Collapse>
-                                    );
-                                  })}
-                              </div>
-                            ))
-                          ) : (
-                            <p>Sections are not available for this course</p>
-                          )}
-                        </Accordion>
-                      </div>
+                                        </a> :
+                                        <a
+                                          // style={{textDecoration:"none"}}
+                                          class="nav-link"
+                                          id={val.id}
+                                          // href="#v-pills-1"
+                                          role="tab"
+                                          aria-controls="v-pills-1"
+                                          aria-selected="true"
+                                          disabled
+                                          title="Nothing to show"
+                                        >
+                                          <i class="far fa-angle-double-right"></i>
 
-                      <div class="col-sm-8">
-                        {/* {this.state.viewTab &&  */}
-                        <div>
-                          <ul class="nav nav-tabs">
-                            <li class="nav-item">
+                                          {val.sub}
+                                        </a>
+                                      }
+                                    </Accordion.Collapse>
+                                  );
+                                })}
+                            </div>
+                          ))
+                        ) : (
+                          <p>Sections are not available for this course</p>
+                        )}
+                      </Accordion>
+                    </div>
+
+                    <div class="col-sm-8">
+                      {/* {this.state.viewTab &&  */}
+                      <div>
+                        <ul class="nav nav-tabs">
+                          <li class="nav-item">
+                            {this.state.videoPopUpData.length > 0 ?
                               <a
                                 class="nav-link"
                                 id="v-pills-1-tab"
@@ -1155,10 +1310,23 @@ async ChangedefaultSubsection(){
 
                               >
                                 Videos{" "}
-                              </a>
-                            </li>
-                            <li class="nav-item">
+                              </a> :
                               <a
+                                class="nav-link"
+                                id="v-pills-1-tab"
+                                // href="#v-pills-1"
+                                role="tab"
+                                data-toggle="tab"
+                                disabled
+                                title="Nothing to show"
+                              >
+                                Videos{" "}
+                              </a>
+                            }
+                          </li>
+                          <li class="nav-item">
+                            {this.state.pptPopUpData.length > 0 ?
+                              < a
                                 id='stsppt'
                                 class="nav-link"
                                 href="#"
@@ -1168,9 +1336,21 @@ async ChangedefaultSubsection(){
                                 }}
                               >
                                 Presentation
+                              </a> :
+                              <a
+                                id='stsppt'
+                                class="nav-link"
+                                // href="#"
+                                data-toggle="tab"
+                                disabled
+                                title="Nothing to show"
+                              >
+                                Presentation
                               </a>
-                            </li>
-                            <li class="nav-item">
+                            }
+                          </li>
+                          <li class="nav-item">
+                            {this.state.pdfPopUpData.length > 0 ?
                               <a
                                 class="nav-link"
                                 id="pdfsts"
@@ -1182,9 +1362,22 @@ async ChangedefaultSubsection(){
                                 }}
                               >
                                 PDF
+                              </a> :
+                              <a
+                                class="nav-link"
+                                id="pdfsts"
+                                // href="#v-pills-1"
+                                role="tab"
+                                data-toggle="tab"
+                                disabled
+                                title="Nothing to show"
+                              >
+                                PDF
                               </a>
-                            </li>
-                            <li class="nav-item">
+                            }
+                          </li>
+                          <li class="nav-item">
+                            {this.state.tabledata.length > 0 ?
                               <a
                                 class="nav-link"
                                 id="v-pills-1-tab"
@@ -1197,147 +1390,65 @@ async ChangedefaultSubsection(){
 
                               >
                                 Assignment{" "}
+                              </a> :
+                              <a
+                                class="nav-link"
+                                id="v-pills-1-tab"
+                                // href="#v-pills-1"
+                                role="tab"
+                                data-toggle="tab"
+                                disabled
+                                title="Nothing to show"
+                              >
+                                Assignment{" "}
                               </a>
-                            </li>
-                          </ul>
-                        </div>
-                        {this.state.isOpenAssignment && (
-                          <div className='tab-content-in'>
-                            {this.state.assignmentNotUploaded ? (
-                              <div>{this.state.assignmentMessage}</div>
-                            )
-                              :
-                              <div>{this.state.tabledata.map((x) => {
-                                return (
-                                  <><h4 className='m-4 p-2' style={{ textAlign: 'center' }}>{x.display_name}</h4>
+                            }
+                          </li>
+                        </ul>
+                      </div>
+                      {this.state.isOpenAssignment && (
+                        <div className='tab-content-in'>
+                          {this.state.assignmentNotUploaded ? (
+                            <div>{this.state.assignmentMessage}</div>
+                          )
+                            :
+                            <div>{this.state.tabledata.map((x) => {
+                              return (
+                                <><h4 className='m-4 p-2' style={{ textAlign: 'center' }}>{x.display_name}</h4>
+                                  <div className="row">
+                                    {/* <div className="col-7"> */}
+                                    <p>Q. {x.question} ?<span className='ps-3' style={{ fontWeight: 'bold', fontSize: '15px' }}></span></p>
+                                    {/* </div> */}
                                     <div className="row">
-                                      {/* <div className="col-7"> */}
-                                      <p>Q. {x.question} ?<span className='ps-3' style={{ fontWeight: 'bold', fontSize: '15px' }}></span></p>
-                                      {/* </div> */}
-                                      <div className="row">
-                                        <div className="col-5" style={{ display: 'flex' }}>
-                                          <input
-                                            type="file"
-                                            name="file"
-                                            className="pull-left"
-                                            onChange={this.assignmentHandler.bind(this)}
-                                          /></div>
-                                        <div className="col-5" style={{ display: 'flex' }}>
-                                          <button
-                                            type="button"
-                                            className="btn btn-primary btn-learn"
-                                            onClick={this.assignmentFile.bind(this)}
-                                          >
-                                            Submit
-                                          </button>
-                                        </div>
+                                      <div className="col-5" style={{ display: 'flex' }}>
+                                        <input
+                                          type="file"
+                                          name="file"
+                                          className="pull-left"
+                                          onChange={this.assignmentHandler.bind(this)}
+                                        /></div>
+                                      <div className="col-5" style={{ display: 'flex' }}>
+                                        <button
+                                          type="button"
+                                          className="btn btn-primary btn-learn"
+                                          onClick={this.assignmentFile.bind(this)}
+                                        >
+                                          Submit
+                                        </button>
                                       </div>
                                     </div>
-                                    <hr />
-                                  </>
-                                )
-                              })}</div>
-                            }
-                          </div>
-
-                        )}
-                        {/* } */}
-                        {(this.state.viewPresentation) && this.state.manyRecords ? (
-                          <div>
-                            <div class="tab-text">
-                              <div class="tab-content" id="v-pills-tabContent">
-                                <div
-                                  class="tab-pane fade show active"
-                                  id="v-pills-1"
-                                  role="tabpanel"
-                                  aria-labelledby="v-pills-1-tab"
-                                >
-                                  <div class="tab-content-in">
-                                    {this.state.pptNotUploaded ? (
-                                      <div>{this.state.pptMessage}</div>
-                                    )
-                                      :
-                                      this.state.pptPopUpData
-                                    }
                                   </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        ) :
-                          this.state.oneRecordPpt ?
-                            <iframe
-                              src={'https://view.officeapps.live.com/op/embed.aspx?src=' + this.state.popUpPpt + '#toolbar=0'}
-                              title="presentation"
-                              style={{ width: "100%", height: "600px" }}
-                              allowFullScreen={true}
-                            ></iframe>
-                            : null
-                        }
-                        {this.state.curPpt ?
-                          <div className="card position-fixed"
-                            style={{
-                              height: "90vh",
-                              width: "60vw",
-                              top: "60px",
-                              left: "20vw",
-                              zIndex: 5,
-                              boxShadow: '6px 6px 6px #8e8e8e, -6px -6px 6px #fff'
-                            }}>
-                            <i class="fas fa-times" style={{ fontSize: '20px', marginLeft: '98%' }} onClick={this.closeWindow}></i><iframe
-                              src={'https://view.officeapps.live.com/op/embed.aspx?src=' + this.state.popUpPpt + '#toolbar=0'}
-                              title="presentation"
-                              style={{ width: "100%", height: "900px" }}
-                              allowFullScreen={true}
-                            ></iframe>
-                          </div>
-                          : null}
-                        {this.state.viewPdf && this.state.manyRecords ? (
-                          <div class="tab-text">
-                            <div class="tab-content" id="v-pills-tabContent">
-                              <div
-                                class="tab-pane fade show active"
-                                id="v-pills-1"
-                                role="tabpanel"
-                                aria-labelledby="v-pills-1-tab"
-                              >
-                                <div class="tab-content-in">
-                                  {this.state.pdfNotUploaded ? (
-                                    <div>{this.state.pdfMessage}</div>
-                                  ) :
-                                    this.state.pdfPopUpData
-                                  }
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        ) :
-                          this.state.oneRecordPdf ?
-                            <iframe
-                              src={this.state.popUpPdf + '#toolbar=0'}
-                              title="pdf"
-                              style={{ width: "100%", height: "600px" }}
-                            ></iframe>
-                            : null}{" "}
-                        {this.state.curPdf ?
-                          <div className="card position-fixed"
-                            style={{
-                              height: "90vh",
-                              width: "42vw",
-                              top: "60px",
-                              left: "30vw",
-                              zIndex: 5,
-                              boxShadow: '6px 6px 6px #8e8e8e, -6px -6px 6px #fff'
-                            }}>
-                            <i class="fas fa-times" style={{ fontSize: '20px', marginLeft: '98%' }} onClick={this.closeWindow}></i><iframe
-                              src={this.state.popUpPdf + '#toolbar=0'}
-                              title="pdf"
-                              style={{ width: "100%", height: "800px" }}
-                            ></iframe>
+                                  <hr />
+                                </>
+                              )
+                            })}</div>
+                          }
+                        </div>
 
-                          </div>
-                          : null}
-                        {this.state.viewVideo && this.state.manyRecords ? (
+                      )}
+                      {/* } */}
+                      {(this.state.viewPresentation) && this.state.manyRecords ? (
+                        <div>
                           <div class="tab-text">
                             <div class="tab-content" id="v-pills-tabContent">
                               <div
@@ -1347,24 +1458,99 @@ async ChangedefaultSubsection(){
                                 aria-labelledby="v-pills-1-tab"
                               >
                                 <div class="tab-content-in">
-                                  {this.state.videoNotUploaded ? (
-                                    <div>{this.state.videoMessage}</div>
-                                  ) :
-                                    this.state.videoPopUpData
+                                  {this.state.pptNotUploaded ? (
+                                    <div>{this.state.pptMessage}</div>
+                                  )
+                                    :
+                                    this.state.pptPopUpData
                                   }
                                 </div>
                               </div>
                             </div>
                           </div>
-                        ) :
-                          this.state.oneRecord ?
-                            <video
-                              src={this.state.popUpVideo} height='600px' width='100%'
-                              controls controlsList='nodownload'
-                            ></video>
-                            : null
-                        }{" "}
-                        {this.state.curVideo ?
+                        </div>
+                      ) :
+                        this.state.oneRecordPpt && this.state.oneRecordExternal == false ?
+                          <iframe
+                            src={'https://view.officeapps.live.com/op/embed.aspx?src=' + this.state.popUpPpt + '#toolbar=0'}
+                            title="presentation"
+                            style={{ width: "100%", height: "600px" }}
+                            allowFullScreen={true}
+                          ></iframe>
+                          :
+                          this.state.oneRecordPpt && this.state.oneRecordExternal ?
+                            <iframe
+                              src={this.state.extContentPpt}
+                              title="presentation"
+                              style={{ width: "100%", height: "600px" }}
+                              allowFullScreen={true}
+                            ></iframe>
+                            : null}
+                      {this.state.curPpt ?
+                        <div className="card position-fixed"
+                          style={{
+                            height: "90vh",
+                            width: "60vw",
+                            top: "60px",
+                            left: "20vw",
+                            zIndex: 5,
+                            boxShadow: '6px 6px 6px #8e8e8e, -6px -6px 6px #fff'
+                          }}>
+                          <i class="fas fa-times" style={{ fontSize: '20px', marginLeft: '98%' }} onClick={this.closeWindow}></i><iframe
+                            src={'https://view.officeapps.live.com/op/embed.aspx?src=' + this.state.popUpPpt + '#toolbar=0'}
+                            title="presentation"
+                            style={{ width: "100%", height: "900px" }}
+                            allowFullScreen={true}
+                          ></iframe>
+                        </div>
+                        : null}
+                      {this.getPptData(this.state.many)}
+                      {this.state.viewPdf && this.state.manyRecords ? (
+                        <div class="tab-text">
+                          <div class="tab-content" id="v-pills-tabContent">
+                            <div
+                              class="tab-pane fade show active"
+                              id="v-pills-1"
+                              role="tabpanel"
+                              aria-labelledby="v-pills-1-tab"
+                            >
+                              <div class="tab-content-in">
+                                {this.state.pdfNotUploaded ? (
+                                  <div>{this.state.pdfMessage}</div>
+                                ) :
+                                  this.state.pdfPopUpData
+                                }
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      ) :
+                        this.state.oneRecordPdf ?
+                          <iframe
+                            src={this.state.popUpPdf + '#toolbar=0'}
+                            title="pdf"
+                            style={{ width: "100%", height: "600px" }}
+                          ></iframe>
+                          : null}{" "}
+                      {this.state.curPdf ?
+                        <div className="card position-fixed"
+                          style={{
+                            height: "90vh",
+                            width: "42vw",
+                            top: "60px",
+                            left: "30vw",
+                            zIndex: 5,
+                            boxShadow: '6px 6px 6px #8e8e8e, -6px -6px 6px #fff'
+                          }}>
+                          <i class="fas fa-times" style={{ fontSize: '20px', marginLeft: '98%' }} onClick={this.closeWindow}></i><iframe
+                            src={this.state.popUpPdf + '#toolbar=0'}
+                            title="pdf"
+                            style={{ width: "100%", height: "800px" }}
+                          ></iframe>
+
+                        </div>
+                        :
+                        this.state.curExtContent ?
                           <div className="card position-fixed"
                             style={{
                               height: "70vh",
@@ -1375,27 +1561,66 @@ async ChangedefaultSubsection(){
                               boxShadow: '6px 6px 6px #8e8e8e, -6px -6px 6px #fff'
                             }}>
                             <i class="fas fa-times" style={{ fontSize: '20px', marginLeft: '98%' }} onClick={this.closeWindow}></i>
-                            <video
-                              // src="https://codingyaar.com/wp-content/uploads/video-in-bootstrap-card.mp4"
-                              src={this.state.popUpVideo} height='900px' width='100%'
-                              controls controlsList='nodownload'
-                            ></video>
-                          </div>
-                          : this.state.curExtVideo ?
-                            <div className="card position-fixed"
-                              style={{
-                                height: "70vh",
-                                width: "60vw",
-                                top: "80px",
-                                left: "23vw",
-                                zIndex: 5,
-                                boxShadow: '6px 6px 6px #8e8e8e, -6px -6px 6px #fff'
-                              }}>
-                              <i class="fas fa-times" style={{ fontSize: '20px', marginLeft: '98%' }} onClick={this.closeWindow}></i>
-                              <iframe width="100%" height="900px" src={this.state.popUpExtVideo} sandbox="allow-forms allow-scripts allow-pointer-lock allow-same-origin allow-top-navigation" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen={true}></iframe>
+                            <div style={{ overflow: 'scroll' }}>
+                              <iframe sandbox width="100%" height="900px" src={this.state.extContent} allowFullScreen={true}></iframe>
                             </div>
-                            : null}
-                        {/* {this.state.viewAssignment ? (
+                          </div>
+                          : null}
+                      {this.state.viewVideo && this.state.manyRecords ? (
+                        <div class="tab-text">
+                          <div class="tab-content" id="v-pills-tabContent">
+                            <div
+                              class="tab-pane fade show active"
+                              id="v-pills-1"
+                              role="tabpanel"
+                              aria-labelledby="v-pills-1-tab"
+                            >
+                              <div class="tab-content-in">
+                                {this.state.videoNotUploaded ? (
+                                  <div>{this.state.videoMessage}</div>
+                                ) :
+                                  this.state.videoPopUpData
+                                }
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      ) :
+                        this.state.oneRecord && this.state.oneRecordExternalVideo == false ?
+                          <video
+                            src={this.state.popUpVideo} height='600px' width='100%'
+                            controls controlsList='nodownload'
+                          ></video>
+                          :
+                          this.state.oneRecord && this.state.oneRecordExternalVideo ?
+                            <iframe
+                              src={this.state.popUpExtVideo}
+                              title="presentation"
+                              style={{ width: "100%", height: "600px" }}
+                              allowFullScreen={true}
+                            ></iframe>
+                            : null
+                      }{" "}
+                      {this.state.curVideo ?
+                        <div className="card position-fixed"
+                          style={{
+                            height: "70vh",
+                            width: "60vw",
+                            top: "80px",
+                            left: "23vw",
+                            zIndex: 5,
+                            boxShadow: '6px 6px 6px #8e8e8e, -6px -6px 6px #fff'
+                          }}>
+                          <i class="fas fa-times" style={{ fontSize: '20px', marginLeft: '98%' }} onClick={this.closeWindow}></i>
+                          <video
+                            // src="https://codingyaar.com/wp-content/uploads/video-in-bootstrap-card.mp4"
+                            src={this.state.popUpVideo} height='900px' width='100%'
+                            controls controlsList='nodownload'
+                          ></video>
+                        </div>
+                        : null}
+                      {this.getVideoData(this.state.manyVideo)}
+                      {/* {this.state.viewAssignment ? (
                         <div>
                           {this.state.assignmentQues.map((data, i) => (
                             <div className="ml-3">
@@ -1431,9 +1656,9 @@ async ChangedefaultSubsection(){
                           ))}
                         </div>
                       ) : null} */}
-                      </div>
-                      <div class="clear-fix"></div>
-                      {/* {this.state.isOpenAssignment && (
+                    </div>
+                    <div class="clear-fix"></div>
+                    {/* {this.state.isOpenAssignment && (
                       <div>
                         <Table striped bordered hover size="sm">
                           <thead>
@@ -1447,16 +1672,16 @@ async ChangedefaultSubsection(){
                         </Table>
                       </div>
                     )} */}
-                    </div>
                   </div>
                 </div>
               </div>
-              <div class="clear-fix"></div>
-              <div>
-                <Discussion />
-              </div>
+            </div>
+            <div class="clear-fix"></div>
+            <div>
+              <Discussion />
             </div>
           </div>
+        </div>
         // </div>
       );
     else {
@@ -1466,4 +1691,4 @@ async ChangedefaultSubsection(){
   }
 }
 
-export default  CourseMaterial;
+export default CourseMaterial;

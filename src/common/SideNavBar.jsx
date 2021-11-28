@@ -103,14 +103,14 @@ class SideNavBar extends Component {
                                 </Link>
                             </li>
 
-                            <li class="nav-item">
+                            {/* <li class="nav-item">
                                 <Link
                                     to={{ pathname: "/allgroup", state: { from: this.props.location } }} className="nav-link">
                                     <i class="fas fa-user-friends"></i>
                                     <span>All Group</span>
                                 </Link>
 
-                            </li>
+                            </li> */}
                         </div>
                         : null}
 

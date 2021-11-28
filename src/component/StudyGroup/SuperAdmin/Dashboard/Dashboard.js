@@ -11,8 +11,7 @@ import moment from "moment"
 import { Link } from 'react-router-dom';
 import ReactApexChart from "react-apexcharts";
 import '../../../../common/loader.css'
-
-import { API_BASE_URL,EMAIL_URL } from '../../../../constants';
+import { API_BASE_URL, EMAIL_URL } from '../../../../constants';
 import Chart from "react-google-charts";
 
 
@@ -37,7 +36,7 @@ export default class DashboardAdmin extends Component {
 
     this.reset = this.reset.bind(this);
     this.dashboardData = this.dashboardData.bind(this);
-    this.graphData=this.graphData.bind(this);
+    this.graphData = this.graphData.bind(this);
     this.delete = this.delete.bind(this)
     this.state = {
 
@@ -56,44 +55,9 @@ export default class DashboardAdmin extends Component {
       totalUser: '',
       totalGroup: '',
       pendingReuest: '',
-
-
       groupcreated: [],
       adminDetails: [],
       adminDetailsagain: [],
-
-      columns: [
-
-        {
-          dataField: 'imag',
-          text: 'Profile',
-          sort: true
-        },
-        {
-          dataField: 'gpname',
-          text: <>Group
-            <span style={{ marginLeft: "10px" }}>&#8657;</span> <span style={{ marginLeft: "-20px" }}>&#8659;</span></>,
-          sort: true
-        },
-        {
-          dataField: 'user',
-          text: <>Admin <span style={{ marginLeft: "10px" }}>&#8657;</span> <span style={{ marginLeft: "-20px" }}>&#8659;</span></>,
-
-          sort: true
-        },
-        {
-          dataField: 'dateTime',
-          text: <>Time <span style={{ marginLeft: "10px" }}>&#8657;</span> <span style={{ marginLeft: "-20px" }}>&#8659;</span></>,
-
-          sort: true
-        },
-
-        {
-          dataField: 'join',
-          text: 'Meeting',
-
-        },
-      ],
 
       //pie chart
 
@@ -177,7 +141,6 @@ export default class DashboardAdmin extends Component {
     axios.get(API_BASE_URL + 'groupjson/')
       .then((res) =>
         // console.log(res.data))
-
         this.setState({
           adminDetails: res.data
         })
@@ -199,9 +162,9 @@ export default class DashboardAdmin extends Component {
 
   componentDidMount() {
     this.graphData();
-    document.getElementById('pageDropDown').classList.add('btn-sm');
-    document.getElementById('search-bar-0').style.height = '35px'
-    document.getElementById('search-bar-0').style.width = '140px'
+    // document.getElementById('pageDropDown').classList.add('btn-sm');
+    // document.getElementById('search-bar-0').style.height = '35px'
+    // document.getElementById('search-bar-0').style.width = '140px'
     this.group1();
     this.finddate();
     this.fetchUser();
@@ -210,14 +173,14 @@ export default class DashboardAdmin extends Component {
     // this.group();
     this.savya();
 
-    
+
   }
 
   graphData() {
-    fetch(API_BASE_URL + 'graph')    
+    fetch(API_BASE_URL + 'graph')
       .then(response => response.json())
       .then((data) => {
-        // console.log(data)
+        console.log(data)
 
         this.setState({
           totalUser: data[0].card.user,
@@ -227,8 +190,8 @@ export default class DashboardAdmin extends Component {
           userCreated: data[0].card.userCreated,
           pieChartData: data[0].pieChart,
         })
-    
-        
+
+
         this.setState({
           series: [
             {
@@ -251,7 +214,7 @@ export default class DashboardAdmin extends Component {
         })
 
         this.setState({
-          seriesPie :data[0].pieChart.noOfGp
+          seriesPie: data[0].pieChart.noOfGp
         })
 
         this.setState({
@@ -291,17 +254,15 @@ export default class DashboardAdmin extends Component {
           data1: data,
           totalGroup: data.length
         });
-        // console.log(data)
+        console.log(data)
       });
 
   }
 
   fetchUser() {
-
-    UserServices. userdetails()
+    UserServices.userdetails()
       .then(response => response.json())
       .then((data) => {
-        console.log(data);
         this.setState({
           user: data,
           totalUser: data.length
@@ -413,21 +374,8 @@ export default class DashboardAdmin extends Component {
   }
 
   dashboardData() {
-    console.log("<<<<<<<<<<< OKAY >>>>>>>>>>")
-    console.log(this.myRef1.current.value)
-    console.log(this.myRef2.current.value)
-    console.log(this.myRef3.current.value)
-    var a=this.state.optionsPie
-    var b=this.state.seriesPie
-    // // if(a.indexOf(this.myRef1.current.value)>-1){
-    // //   var index=a.indexOf(this.myRef1.current.value)
-    // //   console.log(index)
-    // // }
-    console.log(a)
-    console.log(b)
-
-
-
+    var a = this.state.optionsPie
+    var b = this.state.seriesPie
     fetch(API_BASE_URL + 'superAdminDashboard', {
       method: 'POST',
       body: JSON.stringify({
@@ -471,7 +419,7 @@ export default class DashboardAdmin extends Component {
         })
 
         this.setState({
-          seriesPie :data[0].piechart.data
+          seriesPie: data[0].piechart.data
         })
 
         this.setState({
@@ -481,7 +429,7 @@ export default class DashboardAdmin extends Component {
           }
         })
 
-        
+
       }
       )
       .catch(error => console.log(error))
@@ -527,69 +475,61 @@ export default class DashboardAdmin extends Component {
     })
 
     // Active groups in StudyGroups
-    var dd = this.state.pieChartData;
-    var user = this.state.user
-    var i = -1
-    const rows2 = this.state.data1.map((grp) => {
-      //  i=0
-      i = i + 1
-      if (i < 4) {
+    // var dd = this.state.pieChartData;
+    // var user = this.state.user
+    // var i = -1
+    // const rows2 = this.state.data1.map((grp) => {
+    //   //  i=0
+    //   i = i + 1
+    //   if (i < 4) {
 
-        return (
-          <div className="card  mt-2" style={{ width: '250px', marginLeft: '30px' }} >
-            <h5 className="card-title mt-1" style={{ textAlign: "center", color: "#22b1ed" }}>  {grp.gpName}</h5>
-            {/* <h5 className="card-title mx-auto mt-1" style={{color: "#22b1ed", fontSize: "150%", fontWeight: "bold" }}>{grp.gpName}</h5> */}
+    //     return (
+    //       <div className="card  mt-2" style={{ width: '250px', marginLeft: '30px' }} >
+    //         <h5 className="card-title mt-1" style={{ textAlign: "center", color: "#22b1ed" }}>  {grp.gpName}</h5>
+    //         {/* <h5 className="card-title mx-auto mt-1" style={{color: "#22b1ed", fontSize: "150%", fontWeight: "bold" }}>{grp.gpName}</h5> */}
 
-            <img clasName="mx-auto" src={grp.imagess} style={{ borderColor: "#6e707e", width: "28%", height: "56%", marginLeft: "37%", marginBottom: "7%" }} alt="" />
+    //         <img clasName="mx-auto" src={grp.imagess} style={{ borderColor: "#6e707e", width: "28%", height: "56%", marginLeft: "37%", marginBottom: "7%" }} alt="" />
 
-          </div>
+    //       </div>
 
-        )
-      }
-    })
-
+    //     )
+    //   }
+    // })
 
     return (
-
       <>
-
-
-<div class="filter-div mb-2">
-{/*  <h6 className="sup-admin"> Hii  ,{"Super Admin"}</h6> */}
-              <div class="row">
-                <div class="col-md-4">
-                <div class="input-icon">
-                  <div class="form-group">
+        <div class="filter-div mb-2">
+          <div class="row">
+            <div class="col-md-4">
+              <div class="input-icon">
+                <div class="form-group">
                   <input type="text" ref={this.myRef1} placeholder="Enter Group Name" class="form-control" />
-                  </div>
-                  <i class="fas fa-users"></i>
                 </div>
-                </div> 
+                <i class="fas fa-users"></i>
+              </div>
+            </div>
 
-                <div class="col-md-3">
-                    <div class="input-icon input-date">
-                  <div class="form-group">
+            <div class="col-md-3">
+              <div class="input-icon input-date">
+                <div class="form-group">
                   <input name="somedate" id="txtDate" type="date" max={new Date().toISOString().split('T')[0]} ref={this.myRef2} />
-                  </div>
                 </div>
               </div>
+            </div>
 
-                <div class="col-md-3">
-                       <div class="input-icon input-date">
-                  <div class="form-group">
-                  <input type="somedate" id="txtDate" type="date"  ref={this.myRef3} />
-                  </div>
+            <div class="col-md-3">
+              <div class="input-icon input-date">
+                <div class="form-group">
+                  <input type="somedate" id="txtDate" type="date" ref={this.myRef3} />
                 </div>
-                </div>
-
-                <div class="col-md-2">
-                <button class="btn btn-apply" nClick={this.dashboardData}>Apply</button>
-                </div>
-
-
-                <div class="clear-fix"></div>
               </div>
-          </div> 
+            </div>
+            <div class="col-md-2">
+              <button class="btn btn-apply" nClick={this.dashboardData}>Apply</button>
+            </div>
+            <div class="clear-fix"></div>
+          </div>
+        </div>
 
         <div class="row mb-3">
           <div class="col-xl-3 col-md-6 mb-4">
@@ -611,7 +551,6 @@ export default class DashboardAdmin extends Component {
               </div>
             </div>
           </div>
-
 
           <div class="col-xl-3 col-md-6 mb-4">
             <div class="card h-100">
@@ -651,10 +590,8 @@ export default class DashboardAdmin extends Component {
               </div>
             </div>
           </div>
-          {/* <Link class="mb-2" type="url" style={{ fontSize: "130%", marginTop: "7%" }}          // onclick={this.props.test()} 
-              href={() => this.props.test()} onClick={() => this.props.test()}><u>View More</u></Link>
-    */}
-          <div class="col-xl-3 col-md-6 mb-4"> 
+
+          <div class="col-xl-3 col-md-6 mb-4">
             <div class="card h-100">
               <div class="card-body" >
                 <div class="row no-gutters align-items-center">
@@ -675,40 +612,35 @@ export default class DashboardAdmin extends Component {
               </div>
             </div>
           </div>
-
-
         </div>
 
         <div className="row">
           <div className="col-xl-6 col-md-12">
-            <div className="card" id="chart" style={{width:"100%"}}>
+            <div className="card" id="chart" style={{ width: "100%" }}>
               <h5 className="card-header">Monthly Report</h5>
               <div className="card-body">
-              <ReactApexChart options={this.state.options} series={this.state.series} type="bar" width="100%"/>
+                <ReactApexChart options={this.state.options} series={this.state.series} type="bar" width="100%" />
               </div>
             </div>
           </div>
 
           <div className="col-xl-6 col-md-12">
-            <div className="card" id="chart" style={{width:"84%"}}>
+            <div className="card" id="chart" style={{ width: "84%" }}>
               <h5 className="card-header">No. of groups where user is admin</h5>
               <div className="card-body">
-              <ReactApexChart options={this.state.optionsPie} series={this.state.seriesPie} type="pie" width="100%" />
+                <ReactApexChart options={this.state.optionsPie} series={this.state.seriesPie} type="pie" width="100%" />
               </div>
             </div>
           </div>
         </div>
 
-
-
-
-        <div class="card-footer " style={{ marginTop: "4%", height: "15%", width: "100%", marginBottom: '60px' }} >
+        {/* <div class="card-footer " style={{ marginTop: "4%", height: "15%", width: "100%", marginBottom: '60px' }} >
           <p style={{ color: "black", fontSize: "20px", fontWeight: "bold", marginLeft: "1%", marginTop: "1%" }}>Top Active Groups-</p>
           <br></br>
           <div class="row mx-auto" style={{ justifyContent: 'space-evenly' }}>
             {rows2}
           </div>
-        </div>
+        </div> */}
 
 
 
@@ -716,95 +648,95 @@ export default class DashboardAdmin extends Component {
 
         {/*  meeting that scheduled with their respective group*/}
         < div className="row">
-          <div className="col-xl-6 col-md-12">
-          <div class="card">
-          <div class="card-body">
-            <PaginationProvider
-              pagination={paginationFactory({
-                custom: true,
-                paginationSize: 5,
-                pageStartIndex: 1,
-                firstPageText: '<<',
-                prePageText: '<',
-                nextPageText: '>',
-                lastPageText: '>>',
-                hideSizePerPage: true,
-                showTotal: true,
-                color: "red",
-                sizePerPageList: [
+          {/* <div className="col-xl-6 col-md-12">
+            <div class="card">
+              <div class="card-body">
+                <PaginationProvider
+                  pagination={paginationFactory({
+                    custom: true,
+                    paginationSize: 5,
+                    pageStartIndex: 1,
+                    firstPageText: '<<',
+                    prePageText: '<',
+                    nextPageText: '>',
+                    lastPageText: '>>',
+                    hideSizePerPage: true,
+                    showTotal: true,
+                    color: "red",
+                    sizePerPageList: [
 
-                  {
-                    text: "4",
-                    value: 4
-                  },
-                  {
-                    text: "10",
-                    value: 10
-                  },
-                  {
-                    text: "15",
-                    value: 15
-                  },
+                      {
+                        text: "4",
+                        value: 4
+                      },
+                      {
+                        text: "10",
+                        value: 10
+                      },
+                      {
+                        text: "15",
+                        value: 15
+                      },
 
-                  {
-                    text: "All",
-                    value: this.state.data.length
-                  }
-                ],
+                      {
+                        text: "All",
+                        value: this.state.data.length
+                      }
+                    ],
 
-                hideSizePerPage: false
-              })}
-              keyField="id"
-              columns={this.state.columns}
-              data={this.state.data}
-            >
-              {({ paginationProps, paginationTableProps }) => (
-                <ToolkitProvider
+                    hideSizePerPage: false
+                  })}
                   keyField="id"
                   columns={this.state.columns}
-                  data={this.state.rows}
-                  search
+                  data={this.state.data}
                 >
+                  {({ paginationProps, paginationTableProps }) => (
+                    <ToolkitProvider
+                      keyField="id"
+                      columns={this.state.columns}
+                      data={this.state.rows}
+                      search
+                    >
 
-                  {toolkitprops => (
-                    <div>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '15px', marginTop: '15px', padding: '15px' }}>
-                        <SizePerPageDropdownStandalone
-                          {...paginationProps}
-                        />
-                        <SearchBar {...toolkitprops.searchProps} />
-                      </div>
-                      <BootstrapTable striped
+                      {toolkitprops => (
+                        <div>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '15px', marginTop: '15px', padding: '15px' }}>
+                            <SizePerPageDropdownStandalone
+                              {...paginationProps}
+                            />
+                            <SearchBar {...toolkitprops.searchProps} />
+                          </div>
+                          <BootstrapTable striped
 
-                        {...toolkitprops.baseProps}
-                        {...paginationTableProps}
+                            {...toolkitprops.baseProps}
+                            {...paginationTableProps}
 
-                        defaultSorted={defaultSorted}
-                        defaultSortDirection="asc"
-                        condensed
-                        noDataIndication="No Data Is Available"
-                      />
-                      <div style={{ display: 'flex', justifyContent: 'space-between', padding: '15px' }}>
-                        <PaginationTotalStandalone
-                          {...paginationProps}
-                        />
+                            defaultSorted={defaultSorted}
+                            defaultSortDirection="asc"
+                            condensed
+                            noDataIndication="No Data Is Available"
+                          />
+                          <div style={{ display: 'flex', justifyContent: 'space-between', padding: '15px' }}>
+                            <PaginationTotalStandalone
+                              {...paginationProps}
+                            />
 
-                        <PaginationListStandalone
-                          {...paginationProps}
-                        /></div>
-                    </div>
+                            <PaginationListStandalone
+                              {...paginationProps}
+                            /></div>
+                        </div>
+                      )}
+                    </ToolkitProvider>
                   )}
-                </ToolkitProvider>
-              )}
-            </PaginationProvider> 
+                </PaginationProvider>
+              </div>
             </div>
-          </div>
-          </div>
+          </div> */}
 
 
 
           <div className="col-xl-6 col-md-6">
-            <div class="card mb-4" style={{width:"50%"}}>
+            <div class="card mb-4" style={{ width: "50%" }}>
               <h5 class="m-3 font-weight-bold text-primary" style={{ color: "#22b1ed", textAlign: "center" }}>Groups and Admins</h5>
               <div class="card-body">
                 <table class="table overflow-auto table-responsive ">
@@ -817,7 +749,7 @@ export default class DashboardAdmin extends Component {
             </div>
           </div>
 
- 
+
         </div>
 
 

@@ -625,7 +625,7 @@ export default class Chat extends Component {
             return (
 
               <a href={"/Chat/" + grp.grp_ID.gpName + "/" + grp.grp_ID.id + "/" + new Encryption().decrypt(encryptedData).ussername}>
-                <li class="contact">
+                <li class="contact" style={{listStyle:"none"}}>
                   <div class="wrap" style={{ marginTop: "4%" }}>
                     <button class="btn btn45 " style={{ backgroundColor: "#54C7F8", color:"#fff", marginTop: '-20px', marginLeft: "-30px", width: '110%', height: "70px", paddingRight: '70%' }} >
                       <img src={grp.grp_ID.imagess} style={{ width: "50px", height: " 50px", marginTop:"0" }} alt="" />
@@ -773,16 +773,14 @@ export default class Chat extends Component {
 
     )
     return (
-
-      <div id="frame" style={{ "width": "100%", "display": "flex",backgroundColor:"#22b1ed",borderRadius:"30px 30px 0 0"}}>
-        <div id="sidepanel"  style={{ width: "28%", "overflow-y": "auto" ,"backgroundImage": "linear-gradient(to right bottom, #22b1ed, #3ab8f0, #4dc0f3, #5cc7f6, #6bcef9)",
+      <div id="frame" style={{ "width": "100%", "display": "flex",backgroundColor:"#22b1ed"}}>
+        <div id="sidepanel"  style={{ width: "28%", "overflow-y": "auto" ,"backgroundImage": "linear-gradient(to right bottom, #22b1ed, #3ab8f0, #4dc0f3, #5cc7f6, #6bcef9)"
        }} >
           <div id="profile" style={{}}>
-            <div class="wrap" >
-             
-              {/* <a href={'data:image/jpeg/png;base64,' + localStorage.getItem("imgs")}> <img id="profile-img" src='https://mdbootstrap.com/img/Photos/Avatars/img%20(1).jpg' style={{ borderColor: "#6e707e", width: "20%", height: "90%" }} alt="" /></a> */}
+            <div class="wrap">
+              {/* <a href={'data:image/jpeg/png;base64,' + localStorage.getItem("imgs")}> <img id="profile-img" src={'data:image/jpeg/png;base64,' + localStorage.getItem("imgs")} style={{ borderColor: "#6e707e", width: "20%", height: "90%" }} alt="" /></a> */}
+              <a href={'data:image/jpeg/png;base64,' + localStorage.getItem("imgs")}> <img id="profile-img" src='https://mdbootstrap.com/img/Photos/Avatars/img%20(1).jpg' style={{ borderColor: "#6e707e", width: "20%", height: "90%" }} alt="" /></a>
               <p style={{ width: "70%", fontWeight: "80%",color:"#fff" ,fontSize:"20px" }} className="mt-1">{new Encryption().decrypt(encryptedData).username}</p>
-
             </div>
             {/* <hr style={{ width: "1000px", height: 
             "2px", marginBottom: "1px", marginRight: "auto", marginTop: "1px", borderWidth: "2px", backgroundColor: "white", marginLeft: '-100px' }} /> */}
@@ -795,8 +793,8 @@ export default class Chat extends Component {
           <div id="bottom-bar">
           </div>
         </div>
-        <div class="content" style={{ "height": "100vh !important" }}>
-          <div class="contact-profile fzn" style={{ display: 'flex',backgroundColor:"#fff" }}>
+        <div class="content fzn3" style={{ "height": "100vh !important" }}>
+          <div class="contact-profile " style={{ display: 'flex',backgroundColor:"#fff" }}>
             {groups1}
             <p style={{ fontWeight: "bold", fontSize: "200%", fontVariant: "small-caps",marginTop:"4px" }} > {this.props.match.params.group} </p>
             <input ref={this.myRef8} type="text" style={{ width: "20%", height: "60%", marginTop: "1%" }} class="form-control mx-auto" id="exampleInputPassword1" placeholder="Search...." />
@@ -813,22 +811,17 @@ export default class Chat extends Component {
                 marginTop: "1%",
                 height: "60%"
               }}>Home</button>
-
-
-
-
             </div> </div>
           {/* Messages  */}
           {/* <hr style={{ width: "150%", height: "2px", marginBottom: "1px", marginRight: "auto", marginTop: "1%", borderWidth: "2px", backgroundColor: "white", marginLeft: '-100px' }} /> */}
-          <div class="messages" id="messages" >
+          <div class="messages " id="messages" style={{backgroundColor:"#f6f8f9"}}>
             <ul>
               {rows}
-
             </ul>
           </div>
-          <div class="message-input" style={{ float: "bottom", background: 'white' }}>
+          <div class="message-input" style={{ float: "bottom", background: 'white' ,height:"48px"}}>
             <div class="wrap" style={{}} >
-              <input id="kajal" style={{ width: '83%', marginLeft: '1%', float: "bottom", marginBottom: "2px", fontSize: "100%" }} type="text" ref={this.myRef} placeholder="Write your Message here" onKeyPress={this.onEnterPress} />
+              <input id="kajal" style={{ width: '83%', marginLeft: '1%', float: "bottom", fontSize: "100%" }} type="text" ref={this.myRef} placeholder="Write your Message here" onKeyPress={this.onEnterPress} />
               <input ref={this.myRef1} onChange={this.base64Handler} style={{ display: 'none' }} id="fileup" type="file" accept="image/*" />
               <label for="fileup" style={{ fontSize: "200%", marginTop: "1.5%" }} class="far fa-image attachment mr-5"></label>
               <input ref={this.myRef2} onChange={this.displayname} style={{ display: 'none' }} id="imgup" type="file" />
@@ -841,12 +834,12 @@ export default class Chat extends Component {
         </div>
         {/* Side panel started for About , GroupMembers ,Rules , Meetings , Leave Group */}
         <div id="sidepanel" style={{ "float": "right", width: "27%", "overflow-y": "auto", "height": "100vh !important"}}>
-          <div class="contact-profile fzn" style={{ display: "flex", height: "8%",backgroundColor:"#fff" }}>
+          <div class="contact-profile fzn3" style={{ display: "flex", height: "8%",backgroundColor:"#fff" }}>
             <span className="ml-3" style={{ marginTop: "1%" }}>{groups1}</span>
             <p style={{ fontWeight: "bold", fontSize: "220%", marginTop: "1%", fontVariant: "small-caps", marginLeft: "8%", color:"#22b1ed" }}  > {this.props.match.params.group} </p>
           </div>
           {/* <hr style={{ width: "130%", height: "2px", marginBottom: "1px", marginRight: "auto", marginTop: "9px", borderWidth: "2px", backgroundColor: "white", marginLeft: '-100px' }} /> */}
-          <button onClick={this.abtbtn} style={{ textAlign: "left", width: "90%", height: "8%", fontSize: "30px" }} class="btn btn2"><span style={{ fontSize: "20px" }}>About {this.props.match.params.group}
+          <button onClick={this.abtbtn} style={{ textAlign: "left", width: "70%", height: "7%", fontSize: "25px" }} class="btn btn2"><span style={{ fontSize: "16px" }}>About {this.props.match.params.group}
           </span><i class="fas fa-chevron-circle-down 4" style={{ float: "right" }}></i></button>
           <div id="abtbtn" class="card fzn" style={{
             display: 'block', color: "black", marginLeft: "5%", marginRight: "19px", marginTop: "10px", width: "90%",
@@ -855,7 +848,7 @@ export default class Chat extends Component {
             <p style={{ fontSize: "100%" }}> {this.state.des.description}</p>
             To learn more <a href={this.state.des.link} style={{ color: 'black' }}><strong>Click Here</strong></a>
           </div>
-          <button onClick={this.membtn} class="btn btn2" style={{ textAlign: "left", width: "90%", height: "8%", fontSize: "2.1vh" }} ><div style={{ display: 'flex', justifyContent: 'space-between' }} ><div><span style={{ fontSize: "20px" }}>Group Members</span> </div><div> {"" + count} </div></div></button>
+          <button onClick={this.membtn} class="btn btn2" style={{ textAlign: "left", width: "70%", height: "7%", fontSize: "2.1vh" }} ><div style={{ display: 'flex', justifyContent: 'space-between' }} ><div><span style={{ fontSize: "16px" }}>Group Members</span> </div><div> {"" + count} </div></div></button>
           <div id="membtn" class="card" style={{
             marginLeft: "5%",
             marginRight: "19px", marginTop: "10px", color: "black", width: "90%",
@@ -872,7 +865,7 @@ export default class Chat extends Component {
             </div>
             <br></br>
             {groupmem}</div>
-          <button class="btn btn2" style={{ textAlign: "left", width: "90%", height: "8%", fontSize: "2.1vh" }} onClick={this.rules}><space style={{ fontSize: "20px" }}>Rules</space><i class='far fa-file-alt' style={{ fontSize: "20px", float: "right" }}></i></button>
+          <button class="btn btn2" style={{ textAlign: "left", width: "70%", height: "7%", fontSize: "2.1vh" }} onClick={this.rules}><space style={{ fontSize: "16px" }}>Rules</space><i class='far fa-file-alt' style={{ fontSize: "20px", float: "right" }}></i></button>
           {/* Rules declared for the study grouo */}
           <div id="rules" class="card" style={{
             marginLeft: "5%",
@@ -889,8 +882,7 @@ export default class Chat extends Component {
             </ul>
           </div>
 
-          {this.state.adminrole == "true" ? <button class="btn btn2" style={{ textAlign: "left", width: "90%", height: "8%" }} onClick={this.togglePopup} >Meeting<i class='far fa-calendar-alt' style={{ fontSize: '20px', float: "right" }}></i></button> : ''}
-
+          {this.state.adminrole == "true" ? <button class="btn btn2" style={{ textAlign: "left", width: "70%", height: "7%" }} onClick={this.togglePopup} >Meeting<i class='far fa-calendar-alt' style={{ fontSize: '20px', float: "right" }}></i></button> : ''}
           <div id="joinschedule" class="card" style={{
             marginLeft: "5%",
             marginRight: "19px", marginTop: "10px", color: "black", width: "90%",
@@ -908,7 +900,7 @@ export default class Chat extends Component {
 
           </div>
 
-          {this.state.adminrole != "true" ? <button class="btn btn2" onClick={() => window.open(userURL)} style={{ textAlign: "left", fontSize: "150%", width: "90%", height: "8%" }}  ><span style={{ fontSiz: "20px" }}><space style={{fontSize:"20px"}}> Join Meeting </space></span><i class='far fa-calendar-alt' style={{ fontSize: '20px', float: "right" }}></i></button> : ''}
+          {this.state.adminrole != "true" ? <button class="btn btn2" onClick={() => window.open(userURL)} style={{ textAlign: "left", fontSize: "150%", width: "70%", height: "7%" }}  ><span style={{ fontSiz: "20px" }}><space style={{fontSize:"16px"}}> Join Meeting </space></span><i class='far fa-calendar-alt' style={{ fontSize: '20px', float: "right" }}></i></button> : ''}
 
           {/* Schedule meeting form */}
           <form>
@@ -952,62 +944,44 @@ export default class Chat extends Component {
               </div>
             </div>
           </form>
-
-          {this.state.adminrole == "true" ? <a href={"/CEmail/" + this.props.match.params.id}> <button class="btn btn2" style={{ textAlign: "left", fontSize: "2.1vh", width: "90%", height: "8%" }}  >Compose Email<i class="fa fa-envelope" style={{ fontSize: '20px', float: "right" }}></i></button></a> : ''}
-
+          {this.state.adminrole == "true" ? <a href={"/CEmail/" + this.props.match.params.id}> <button class="btn btn2" style={{ textAlign: "left", fontSize: "2.1vh", width: "70%", height: "7%" }}  >Compose Email<i class="fa fa-envelope" style={{ fontSize: '20px', float: "right" }}></i></button></a> : ''}
           <div id="popup-10" class="popup" >
             <div class="overlay"></div>
-
             <div class="content" style={{ height: "500px", width: "500px", border: "#AEAEAE", borderWidth: "5px", borderStyle: "solid" }}>
-
               <header style={{ color: "white", backgroundColor: "#AEAEAE", float: "top", marginTop: "-2px", height: "45px", alignItems: "center", fontSize: "20px" }} >Email Notification </header>
-
               <br>
               </br>
-
               <form class="form-horizontal " role="form">
                 <div class="form-group">
                   <label style={{ color: "black", marginLeft: "20px", marginTop: "5px", fontSize: "15px" }}> To:</label>
                   < input type="email" class="form-control select2-offscreen" value={this.state.groupEmail} onChange={this.handleChange} ref={this.myRef10} id="to" placeholder="Type email" tabindex="-1" style={{ float: "right", width: "360px", height: "35px", color: "black" }} />
                   <br></br><br></br>
-
                   <textarea class="form-control" id="message" style={{ float: "right", marginLeft: "100px", width: "360px" }} ref={this.myRef11} name="body" rows="8" placeholder="Write your Mail message here..."></textarea>
                 </div>
-
                 <button onClick={this.emailSend} style={{ width: "70px", height: "32px", float: 'left', marginLeft: "90px", marginRight: "10px", color: "white", background: "#22b1ed", fontSize: "15px" }} class="btn p-1" type="submit">send</button>
                 <button class="btn p-1" style={{ width: "70px", height: "32px", float: 'left', marginLeft: "20px", marginRight: "10px", color: "white", background: "red", fontSize: "15px" }} onClick={this.cancel}>Cancel</button>
               </form>
             </div>
-
           </div>
-
           <div style={{ display: 'none' }} id="addmem" class="popup">
             <div style={{ marginBottom: "100px", marginRight: "4px" }}>
-
               <div className="card mx-auto" id="card1" style={{ width: "100%", height: "auto", 'border-radius': '5px', marginBottom: "10%", marginTop: "50px" }}>
                 <div className="header" id="head" >
                   <div style={{ backgroundColor: "#eaecf4" }} className="card-header text-center"><h2 style={{ color: "#6e707e", fontWeight: "bold", marginTop: '7px' }}>Add Member</h2></div>
                 </div>
                 <form onSubmit={this.mySubmitHandler}>
                   <div className="card-body ">
-
-
                     <div style={{ display: 'flex' }}>
-
                       <select id="add" class="form-control" ref={this.myRef6} style={{ width: "320px" }} >
                         {add}
                       </select>
                     </div>
-
                     <div style={{ width: '1px', marginLeft: '8%' }}>
                       <div style={{ width: "20px", marginLeft: "3%", display: 'flex' }}>
-
                         <button onClick={this.addmembtn} style={{ width: "100px", height: "50px", marginLeft: "60px" }} class="btn btnStyle" type="submit">Save</button>
 
                         <button onClick={this.exit} style={{ width: "100px", height: "50px" }} class="btn btnStyle" type="submit">exit</button>
-
                       </div></div>
-
                   </div>
                 </form>
               </div>
@@ -1034,19 +1008,15 @@ export default class Chat extends Component {
 
                     <div style={{ width: '1px', marginLeft: '8%' }}>
                       <div style={{ width: "20px", marginLeft: "6%", display: 'flex' }}>
-
                         <button onClick={this.remembtn} style={{ width: "100px", height: "50px", marginLeft: "60px" }} class="btn btnStyle" type="submit">Save</button>
-
                         <button onClick={this.cancel} style={{ width: "100px", height: "50px" }} class="btn btnStyle" type="submit">exit</button>
-
                       </div></div>
-
                   </div>
                 </form>
               </div>
             </div>
           </div>
-          {this.state.adminrole != "true" ? <button class="btn btn2" onClick={this.leave} style={{ textAlign: 'left', width: "90%", height: "8%" }}><span style={{fontSize:"20px"}}>Leave Group</span><i class='fas fa-user-minus' style={{ fontSize: '20px', float: 'right' }}></i></button> : ''}
+          {this.state.adminrole != "true" ? <button class="btn btn2" onClick={this.leave} style={{ textAlign: 'left', width: "70%", height: "7%" }}><span style={{fontSize:"16px"}}>Leave Group</span><i class='fas fa-user-minus' style={{ fontSize: '20px', float: 'right' }}></i></button> : ''}
 
           <div style={{ display: 'none' }} id="leave" class="popup">
             <div style={{ marginBottom: "40px", marginRight: "4px" }}>
@@ -1079,3 +1049,8 @@ export default class Chat extends Component {
     )
   }
 }
+
+
+
+
+

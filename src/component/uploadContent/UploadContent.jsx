@@ -49,6 +49,9 @@ class UploadContent extends Component {
       extVidName: '',
       extVidLink: '',
       ext: false,
+      extContentLink: '',
+      extLink: false,
+      extLinkName: '',
 
       columns: [
         {
@@ -330,6 +333,7 @@ class UploadContent extends Component {
     this.setSubSection = this.setSubSection.bind(this);
     this.reset = this.reset.bind(this);
     this.resetState = this.resetState.bind(this);
+    this.resetExternalLink = this.resetExternalLink.bind(this);
     this.showUploadPresentation = this.showUploadPresentation.bind(this);
     this.pptNameHandler = this.pptNameHandler.bind(this);
     this.changePptHandler = this.changePptHandler.bind(this);
@@ -346,29 +350,50 @@ class UploadContent extends Component {
   }
 
   pdfFormatter(cell, row) {
-    return (
-      <iframe
-        src={cell}
-        style={{ height: "100px" }}
-        allowfullscreen="true"
-        alt="pdf"
-      />
-    );
+    if (row.external === false) {
+      return (
+        <iframe
+          src={cell}
+          style={{ width: '100%', height: "300px" }}
+          allowfullscreen="true"
+          alt="pdf"
+        />
+      );
+    }
+    else {
+      return (
+        <iframe src={cell}
+          style={{ width: '100%', height: "300px" }}
+          allowfullscreen="true"
+          alt="pdf"
+        />
+      );
+    }
   }
 
   pptFormatter(cell, row) {
-    return (
-      <iframe
-        src={
-          "https://view.officeapps.live.com/op/embed.aspx?src=" +
-          cell +
-          "#toolbar=0"
-        }
-        title="presentation"
-        style={{ width: "100%", height: "300px" }}
-        allowFullScreen={true}
-      />
-    );
+    if (row.external === false) {
+      return (
+        <iframe
+          src={
+            "https://view.officeapps.live.com/op/embed.aspx?src=" +
+            cell +
+            "#toolbar=0"
+          }
+          title="presentation"
+          style={{ width: "100%", height: "300px" }}
+          allowFullScreen={true}
+        />
+      );
+    }
+    else {
+      return (
+        <iframe src={cell} title="presentation"
+          style={{ width: "100%", height: "300px" }}
+          allowFullScreen={true}
+        />
+      );
+    }
   }
 
   videoFormatter(cell, row) {
@@ -641,6 +666,8 @@ class UploadContent extends Component {
         secData: res,
         sectionId: "",
         uploadPdf: false,
+        setSubSection: false,
+        subSectionId: '',
         uploadPresentation: false,
         isOpenAssignment: false,
         uploadSubSectionVideo: false
@@ -760,6 +787,14 @@ class UploadContent extends Component {
     this.setState({
       pptName: e.target.value,
     });
+  }
+  resetExternalLink() {
+    this.setState({
+      isEditing: false,
+      extLinkName: '',
+      extContentLink: '',
+    });
+    this.getCourseData();
   }
   resetsubvideo() {
     this.clearVideoFile(document.getElementById("videocreate"));
@@ -1438,6 +1473,62 @@ class UploadContent extends Component {
     })
   }
 
+  externalLink() {
+    this.setState({
+      extLink: true
+    })
+  }
+
+  changeExternalLinkNameHandler(e) {
+    this.setState({
+      extLinkName: e.target.value
+    })
+  }
+
+  changeExternalLinkHandler(e) {
+    this.setState({
+      extContentLink: e.target.value
+    })
+  }
+
+  saveExternalLink(type) {
+    if (this.state.extLinkName != "" && this.state.extContentLink != "" && this.state.isEditing == false) {
+      if (this.checkFieldValue(this.state.extLinkName) && this.checkFieldValue(this.state.extContentLink)) {
+        let formData = new FormData();
+        formData.append('id', this.state.subSectionId);
+        formData.append('extLinkName', this.state.extLinkName);
+        formData.append('extContentLink', this.state.extContentLink);
+        formData.append('type', type)
+        UploadContentService.uploadExternalContent(formData, 'ppt').then((res) => {
+          switch (res.status) {
+            case 'true': {
+              this.getList();
+              this.resetExternalLink();
+              Alert.success(res.message);
+              break;
+            }
+            case 'false': {
+              this.resetExternalLink();
+              Alert.warning(res.message);
+              break;
+            }
+            case 'exception': {
+              this.resetExternalLink();
+              Alert.warning(res.message);
+              break;
+            }
+          }
+        })
+      }
+      else {
+        Alert.warning("External Link or display name cannot be empty.")
+      }
+    }
+    else {
+      Alert.warning("Provide Complete Data");
+    }
+  }
+
   saveExternalVideo() {
     if (this.state.extVidName != "" && this.state.extVidLink != "" && this.state.isEditing === false) {
       if (this.checkFieldValue(this.state.extVidName) && this.checkFieldValue(this.state.extVidLink)) {
@@ -1469,7 +1560,7 @@ class UploadContent extends Component {
         })
       }
       else {
-        Alert.warning("External Video URL cannot be empty");
+        Alert.warning("External Video URL or Name cannot be empty");
       }
     }
     else if (this.state.isEditing == true && this.state.subSectionId != "") {
@@ -1517,11 +1608,11 @@ class UploadContent extends Component {
             })
         }
         else {
-          Alert.warning("Display Name cannot be empty");
+          Alert.warning("Display Name or video Url cannot be empty");
         }
       }
     }
-    else{
+    else {
       Alert.warning("Provide Complete Data")
     }
   }
@@ -1699,6 +1790,29 @@ class UploadContent extends Component {
                         Reset
                       </button>
                     </div>
+                    <div id="extLink" style={{ marginTop: '25px', fontWeight: "bold" }}>
+                      <span onClick={this.externalLink.bind(this)} style={{ color: 'blue', fontWeight: 'bold', cursor: 'pointer' }}>Upload an external link to a content instead</span>
+                      <div id="extLinkInfo">
+                        {this.state.extLink ?
+                          <div className="form-group mt-2">
+                            <div className="row">
+                              <div className="col-5">
+                                <label htmlFor="extLink" style={{ fontWeight: 'normal' }}>Display Name</label>
+                                <input className='form-control' type="text" name="dname" id="extLink" placeholder="Display Name" value={this.state.extLinkName} onChange={this.changeExternalLinkNameHandler.bind(this)} />
+                              </div>
+                              <div className="col-7">
+                                <label htmlFor="link" style={{ fontWeight: 'normal' }}>External Content URL</label>
+                                <input type="text" name="link" id="link" className="form-control" placeholder="Content Link" value={this.state.extContentLink} onChange={this.changeExternalLinkHandler.bind(this)} />
+                              </div>
+                            </div>
+                            <div className="btn-display" style={{ marginTop: '25px' }}>
+                              <button className="btn btn-primary btn-blue" type="submit" style={{ marginRight: '50px' }} onClick={this.saveExternalLink.bind(this, 'pdf')}>Save</button>
+                              <button className="btn btn-primary btn-blue" type="submit" onClick={this.resetLink}>Reset</button>
+                            </div>
+                          </div>
+                          : null}
+                      </div>
+                    </div>
                     <br />
                     <div className="form-assignment-dd">
                       <DataGridTableComponent
@@ -1757,6 +1871,29 @@ class UploadContent extends Component {
                         >
                           Reset
                         </button>
+                      </div>
+                      <div id="extLink" style={{ marginTop: '25px', fontWeight: "bold" }}>
+                        <span onClick={this.externalLink.bind(this)} style={{ color: 'blue', fontWeight: 'bold', cursor: 'pointer' }}>Upload an external link to a content instead</span>
+                        <div id="extLinkInfo">
+                          {this.state.extLink ?
+                            <div className="form-group mt-2">
+                              <div className="row">
+                                <div className="col-5">
+                                  <label htmlFor="extLink" style={{ fontWeight: 'normal' }}>Display Name</label>
+                                  <input className='form-control' type="text" name="dname" id="extLink" placeholder="Display Name" value={this.state.extLinkName} onChange={this.changeExternalLinkNameHandler.bind(this)} />
+                                </div>
+                                <div className="col-7">
+                                  <label htmlFor="link" style={{ fontWeight: 'normal' }}>External Content Url</label>
+                                  <input type="text" name="link" id="link" className="form-control" placeholder="Content Link" value={this.state.extContentLink} onChange={this.changeExternalLinkHandler.bind(this)} />
+                                </div>
+                              </div>
+                              <div className="btn-display" style={{ marginTop: '25px' }}>
+                                <button className="btn btn-primary btn-blue" type="submit" style={{ marginRight: '50px' }} onClick={this.saveExternalLink.bind(this, 'ppt')}>Save</button>
+                                <button className="btn btn-primary btn-blue" type="submit" onClick={this.resetLink}>Reset</button>
+                              </div>
+                            </div>
+                            : null}
+                        </div>
                       </div>
                       <br />
                       <div className="form-assignment-dd">

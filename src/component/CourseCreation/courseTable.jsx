@@ -303,7 +303,7 @@ export default class CourseTable extends Component {
                 document.getElementById("erredit").innerHTML="No File Chosen"
                 document.getElementById("erreditvideo").innerHTML="No File Chosen"
                 document.getElementById("erredit").style.color = "black";
-                document.getElementById(" ").style.color = "black";
+                document.getElementById("erreditvideo").style.color = "black";
               // this.clearFileInput(document.getElementById("courseImage"));
               // this.clearFileInput(document.getElementById("courseVideo"));
               this.setState({

@@ -137,7 +137,6 @@ export default class AdminAllGroup extends Component {
         this.setState({
           rows1: res.data
         });
-
         if (res.data.userId.length != 0) {
           s = ""
 

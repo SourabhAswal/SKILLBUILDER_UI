@@ -101,7 +101,7 @@ class UploadContentService extends Component {
         })
     }
 
-    editExternalVideo(formData, id){
+    editExternalVideo(formData, id) {
         return request({
             url: `${API_BASE_URL}upload-extVideo/${id}/`,
             method: 'PUT',
@@ -127,10 +127,19 @@ class UploadContentService extends Component {
         })
     }
 
-    getExternalVideo(id){
+    getExternalVideo(id) {
         return request({
             url: `${API_BASE_URL}upload-extVideo/${id}`,
             method: 'GET',
+            multipart: true
+        });
+    }
+
+    uploadExternalContent(formData) {
+        return request({
+            url: `${API_BASE_URL}upload-extContent/`,
+            method: 'POST',
+            body: formData,
             multipart: true
         });
     }

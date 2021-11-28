@@ -504,17 +504,12 @@ export default class AllUser extends Component {
             <h2 class="heading-2 mb-4 ml-3" ></h2>
 
             <ol class="breadcrumb mt-3">
-
               <li class="breadcrumb-item"><a href="./adminDashboard">Home</a></li>
               <li class="breadcrumb-item active" aria-current="page">All User</li>
-
             </ol>
           </div>
-
           {/* // table that showing the details of user with their role */}
           <div style={{ width: '70%', marginLeft: '15%' }}>
-
-
             <div class="card" id="card" style={{ marginTop: '10px', marginLeft: "2%", paddingLeft: "20px", width: "95%", paddingRight: "20px", overflowX: 'auto' }}>
               <PaginationProvider
 

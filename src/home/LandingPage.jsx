@@ -111,7 +111,11 @@ class LandingPage extends Component {
               <div class="row mt-5">
                 {this.state.allCourses.length > 0 && this.state.allCourses.slice(0, 6).map((data) =>
                   <div class="col-md-2">
-                    <a href="">
+
+
+                    <a id="non" href="#">
+
+
                       <div class="tech-icon wow fadeInUp">
                         <img src={decodeURIComponent(data.course_img)} alt="img" />
                         <h4>{data.course_name}</h4>
